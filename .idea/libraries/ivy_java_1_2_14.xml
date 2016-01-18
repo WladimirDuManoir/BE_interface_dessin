@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="ivy-java-1.2.14">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/probe_java/ivy-java-1.2.14.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/probe_java/ivy-java-1.2.14.jar!/examples" />
+    </SOURCES>
+  </library>
+</component>
