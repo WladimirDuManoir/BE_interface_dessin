@@ -14,7 +14,7 @@
 hs_err_pid*
 
 
-ppilot5
-probe_java
-sra5
-TPFile
+ppilot5/*
+probe_java/*
+sra5/*
+TPFile/*
