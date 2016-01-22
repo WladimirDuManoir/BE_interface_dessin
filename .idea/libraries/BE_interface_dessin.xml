@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="BE_interface_dessin">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/palette.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ivy-java-1.2.14.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
