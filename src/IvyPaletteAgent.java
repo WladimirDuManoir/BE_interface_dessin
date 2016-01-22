@@ -5,6 +5,7 @@ import fr.dgac.ivy.IvyMessageListener;
 
 import java.awt.geom.Point2D;
 import java.io.*;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -16,6 +17,11 @@ import java.util.Scanner;
 public class IvyPaletteAgent {
     private Ivy bus;
     private Stroke stroke;
+    Stroke templateSupprimer = new Stroke();
+    Stroke templateRectangle = new Stroke();
+    Stroke templateEllipse = new Stroke();
+    Stroke templateDeplacer = new Stroke();
+
 
     public IvyPaletteAgent() throws IvyException {
         stroke = new Stroke();
@@ -128,29 +134,84 @@ public class IvyPaletteAgent {
      */
     private void analyseStroke (Stroke stroke) throws IvyException {
         bus.sendMsg("Palette:TesterPoint x=35 y=10");
+        Double distance = 0.0;
         System.out.println("Analysing stroke ...." );
         stroke.normalize();
-        setTemplate(stroke);
+        setTemplate();
+        determinerStroke(stroke);
+    }
+
+
+    private void determinerStroke(Stroke s){
+        int formeReconnue = 1;
+        Double d1 = calculerDistance(stroke, templateSupprimer);
+        Double d2 = calculerDistance(stroke, templateRectangle);
+        if (d2 < d1){
+            formeReconnue = 2;
+        }
+        Double d3 = calculerDistance(stroke, templateEllipse);
+        if ((d3 < d2) &&(d3 < d1)){
+            formeReconnue = 3;
+        }
+        Double d4 = calculerDistance(stroke, templateDeplacer);
+        if ((d4<d1)&&(d4<d2)&&(d4<d3)){
+            formeReconnue = 4;
+        }
+
+        switch (formeReconnue){
+            case 1 : System.out.println("Supprimer");
+                break;
+            case 2 : System.out.println("Rectangle");
+                break;
+            case 3 : System.out.println("Ellipse");
+                break;
+            case 4 : System.out.println("Deplacer");
+                break;
+        }
+
+    }
+
+    private Double calculerDistance(Stroke s1, Stroke s2){
+        Double distance = 0.0;
+        int i;
+        Double x1;
+        Double x2;
+        Double y1;
+        Double y2;
+        Double ajout;
+        for (i=0;i<s1.listePoint.size()-1;i++){
+            x1 = s1.listePoint.get(i).getX();
+            x2 = s2.listePoint.get(i).getX();
+            y1 = s1.listePoint.get(i).getY();
+            y2 = s2.listePoint.get(i).getY();
+            ajout = Math.abs((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+            distance += ajout;
+        }
+        return distance;
     }
 
     /**
      * Set up the template (List of points).
      */
-    private void setTemplate (Stroke stroke) {
-        System.out.println("Creating template .. ");
-        lireFichier("templateSupprimer");
+    private void setTemplate () {
+        templateSupprimer = lireFichier("templateSupprimer");
+        templateRectangle = lireFichier("templateRectangle");
+        templateEllipse = lireFichier("templateEllipse");
+        templateDeplacer = lireFichier("templateDeplacer");
+
     }
 
 
-    private void lireFichier(String nomFic){
-    System.out.println("blabla");
+    private Stroke lireFichier(String nomFic){
+        Stroke template = new Stroke();
         try
         {
 
             File f = new File (nomFic);
             Scanner scanner = new Scanner (f);
 
-            scanner.useDelimiter(",");
+            scanner.useLocale(Locale.US);
+            scanner.useDelimiter(", |Point2D.Double\\[|\\]Point2D.Double\\[");
             Double ptX;
             Double ptY;
 
@@ -160,14 +221,12 @@ public class IvyPaletteAgent {
                 {
                     ptX = scanner.nextDouble();
                     ptY = scanner.nextDouble();
+                    Point2D.Double point = new Point2D.Double(ptX,ptY);
+                    template.listePoint.add(point);
 
-                    System.out.println (ptX +","+ptY);
                 }
                 catch (NoSuchElementException exception)
                 {
-                    System.out.println("blabla2"+exception.toString()
-                    );
-
                     break;
                 }
             }
@@ -178,7 +237,7 @@ public class IvyPaletteAgent {
         {
             System.out.println ("Le fichier n'a pas été trouvé");
         }
-
+        return template;
     }
 
     public void ecrireFichier(String nomFic, String texte)
