@@ -2,11 +2,8 @@
   <library name="ivy-java-1.2.14">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/probe_java/ivy-java-1.2.14.jar!/" />
-      <root url="jar://$PROJECT_DIR$/palette.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/probe_java/ivy-java-1.2.14.jar!/examples" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

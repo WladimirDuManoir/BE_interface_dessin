@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="TPFile">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/TPFile/probe_java.zip!/" />
+      <root url="jar://$PROJECT_DIR$/TPFile/ppilot5.zip!/" />
+      <root url="jar://$PROJECT_DIR$/TPFile/RSSolo4French.zip!/" />
+      <root url="jar://$PROJECT_DIR$/TPFile/sra5.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
