@@ -52,6 +52,10 @@ public class IvyPaletteAgent {
         });
     }
 
+    /**
+     * This check if the palette has reseed a mouse pressed.
+     * @throws IvyException
+     */
     private void mousePressed() throws IvyException {
         bus.bindMsg(".*MousePressed x=(.*) y=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
@@ -68,6 +72,10 @@ public class IvyPaletteAgent {
         });
     }
 
+    /**
+     * This check if the palette has reseed a mouse released.
+     * @throws IvyException
+     */
     private void mouseReleased() throws IvyException {
         bus.bindMsg(".*MouseReleased x=(.*) y=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
@@ -78,7 +86,8 @@ public class IvyPaletteAgent {
                     stroke.addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
                     stroke.centroid = stroke.calculCentroid();
                     analyseStroke(stroke);
-                    bus.sendMsg("Palette:CreerRectangle x=30");
+                    bus.sendMsg("Palette:CreerRectangle x=30"); // TODOELETE
+                     // TODOELETE
                 } catch (IvyException e) {
                     e.printStackTrace();
                 }
@@ -86,6 +95,10 @@ public class IvyPaletteAgent {
         });
     }
 
+    /**
+     * This check if the palette has reseed a mouse dragged.
+     * @throws IvyException
+     */
     private void mouseDragged() throws IvyException {
         bus.bindMsg(".*mouseDragged x=(.*) y=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
@@ -101,16 +114,16 @@ public class IvyPaletteAgent {
         });
     }
 
+    /**
+     * This check if the palette has a figure in a specific point.
+     * @throws IvyException
+     */
     private void testPoint() throws IvyException {
         bus.bindMsg(".*Palette:ResultatTesterPoint.*nom=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
                 String obj = args[0];
                 System.out.println("Test point detected" );
-                try {
-                    bus.sendMsg("My name is : " + obj);
-                } catch (IvyException e) {
-                    e.printStackTrace();
-                }
+                    System.out.println("in try"+ obj.toString());
             }
         });
     }
@@ -120,6 +133,7 @@ public class IvyPaletteAgent {
      * @param stroke
      */
     private void analyseStroke (Stroke stroke) throws IvyException {
+        bus.sendMsg("Palette:TesterPoint x=35 y=10");
         Double distance = 0.0;
         System.out.println("Analysing stroke ...." );
         stroke.normalize();
@@ -177,7 +191,7 @@ public class IvyPaletteAgent {
     }
 
     /**
-     * Set up the template (Liste of points).
+     * Set up the template (List of points).
      */
     private void setTemplate () {
         templateSupprimer = lireFichier("templateSupprimer");
