@@ -3,6 +3,7 @@ import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyException;
 import fr.dgac.ivy.IvyMessageListener;
 
+import javax.swing.*;
 import java.awt.geom.Point2D;
 import java.io.*;
 import java.util.Locale;
@@ -84,9 +85,8 @@ public class IvyPaletteAgent {
                 try {
                     bus.sendMsg("Mouse released. x=" + x + " " + "y=" + y);
                     stroke.addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
-                    stroke.centroid = stroke.calculCentroid();
                     analyseStroke(stroke);
-                    bus.sendMsg("Palette:CreerRectangle x=30"); // TODOELETE
+                    //bus.sendMsg("Palette:CreerRectangle x=30"); // TODOELETE
                      // TODOELETE
                 } catch (IvyException e) {
                     e.printStackTrace();
@@ -100,16 +100,13 @@ public class IvyPaletteAgent {
      * @throws IvyException
      */
     private void mouseDragged() throws IvyException {
-        bus.bindMsg(".*mouseDragged x=(.*) y=(.*)", new IvyMessageListener() {
+        bus.bindMsg(".*MouseDragged x=(.*) y=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
                 String x = args[0];
                 String y = args[1];
-                try {
-                    bus.sendMsg("Mouse dragged. x=" + x + " " + "y=" + y);
-                    stroke.addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
-                } catch (IvyException e) {
-                    e.printStackTrace();
-                }
+                System.out.println("x:"+x+",y"+y);
+                //bus.sendMsg("Mouse dragged. x=" + x + " " + "y=" + y);
+                stroke.addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
             }
         });
     }
@@ -122,8 +119,8 @@ public class IvyPaletteAgent {
         bus.bindMsg(".*Palette:ResultatTesterPoint.*nom=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
                 String obj = args[0];
-                System.out.println("Test point detected" );
-                    System.out.println("in try"+ obj.toString());
+                //System.out.println("Test point detected" );
+                  //  System.out.println("in try"+ obj.toString());
             }
         });
     }
@@ -133,16 +130,27 @@ public class IvyPaletteAgent {
      * @param stroke
      */
     private void analyseStroke (Stroke stroke) throws IvyException {
-        bus.sendMsg("Palette:TesterPoint x=35 y=10");
+        int i;
+        int nbPts=0;
         Double distance = 0.0;
         System.out.println("Analysing stroke ...." );
         stroke.normalize();
         setTemplate();
+       // afficher(stroke);
         determinerStroke(stroke);
+
+    }
+
+    private void afficher(Stroke stroke) {
+        AffichageStroke affichageTemplate = new AffichageStroke(stroke);
+        JFrame affichageFrame = new JFrame();
+        affichageFrame.add(affichageTemplate);
+        affichageFrame.setVisible(true);
+
     }
 
 
-    private void determinerStroke(Stroke s){
+    private void determinerStroke(Stroke s) throws IvyException {
         int formeReconnue = 1;
         Double d1 = calculerDistance(stroke, templateSupprimer);
         Double d2 = calculerDistance(stroke, templateRectangle);
@@ -158,14 +166,23 @@ public class IvyPaletteAgent {
             formeReconnue = 4;
         }
 
+
         switch (formeReconnue){
             case 1 : System.out.println("Supprimer");
+                //bus.sendMsg("Palette:CreerRectangle x=10 y=10");
+
                 break;
             case 2 : System.out.println("Rectangle");
+                //bus.sendMsg("Palette:CreerRectangle x=50 y=50");
+
                 break;
             case 3 : System.out.println("Ellipse");
+                //bus.sendMsg("Palette:CreerRectangle x=100 y=100");
+
                 break;
             case 4 : System.out.println("Deplacer");
+                //bus.sendMsg("Palette:CreerRectangle x=150 y=150");
+
                 break;
         }
 
@@ -184,7 +201,7 @@ public class IvyPaletteAgent {
             x2 = s2.listePoint.get(i).getX();
             y1 = s1.listePoint.get(i).getY();
             y2 = s2.listePoint.get(i).getY();
-            ajout = Math.abs((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+            ajout = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
             distance += ajout;
         }
         return distance;
@@ -198,9 +215,7 @@ public class IvyPaletteAgent {
         templateRectangle = lireFichier("templateRectangle");
         templateEllipse = lireFichier("templateEllipse");
         templateDeplacer = lireFichier("templateDeplacer");
-
     }
-
 
     private Stroke lireFichier(String nomFic){
         Stroke template = new Stroke();
