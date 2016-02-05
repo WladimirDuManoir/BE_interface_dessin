@@ -155,7 +155,7 @@ public class IvyPaletteAgent {
     }
 
 
-    private void determinerStroke(Stroke s) {
+    private void determinerStroke(Stroke s) throws IvyException {
         // XXX simplify code
         int formeReconnue = 1;
         Double d1 = calculerDistance(stroke, templateSupprimer);
@@ -178,9 +178,11 @@ public class IvyPaletteAgent {
                 break;
             case 2 : System.out.println("Rectangle");
                 action = Action.RECLANGLE;
+                ApplyOnShape("rectangle");
                 break;
             case 3 : System.out.println("Ellipse");
                 action = Action.ELLIPSE;
+                ApplyOnShape("eclipse");
                 break;
             case 4 : System.out.println("Deplacer");
                 action = Action.MOVE;
@@ -197,24 +199,25 @@ public class IvyPaletteAgent {
 
         switch (action) {
             case DELETE:
-                System.out.println("TODO  delete obj "+ obj);
+                System.out.println("DELETE "+ obj);
+                bus.sendMsg("Palette:SupprimerObject nom=" + obj);
                 break;
             case RECLANGLE:
-                System.out.println("rec obj "+ obj);
+                System.out.println("CREATION REC "+ obj);
                 bus.sendMsg("Palette:CreerRectangle x=30 y=30 longueur=100");
 
                 break;
             case ELLIPSE:
-                System.out.println("elisps obj "+ obj);
+                System.out.println("CREATION ELLIPSE "+ obj);
                 bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
 
                 break;
             case MOVE:
-                System.out.println("move obj "+ obj);
+                System.out.println("MOVE "+ obj);
                 bus.sendMsg("Palette:DeplacerObjet nom=" + obj + " x=300");
                 break;
             case NOTHING:
-                System.out.println("no obj "+ obj);
+                System.out.println("NONE SUPPORTED"+ obj);
                 break;
 
         }
