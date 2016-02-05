@@ -9,7 +9,8 @@ public class Main {
     public static void main(String [] args) throws IvyException {
         //Audio audio = new Audio();
         // TODO use Controller
-        IvyPaletteAgent iv = new IvyPaletteAgent();
+        Controller c = new Controller();
+        // IvyPaletteAgent iv = new IvyPaletteAgent();
 //        AffichageTemplate affichageTemplate = new AffichageTemplate();
 //        JFrame affichageFrame = new JFrame();
 //        affichageFrame.add(affichageTemplate);

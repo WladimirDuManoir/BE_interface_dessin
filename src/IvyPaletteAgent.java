@@ -5,10 +5,6 @@ import fr.dgac.ivy.IvyMessageListener;
 
 import javax.swing.*;
 import java.awt.geom.Point2D;
-import java.io.*;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 /**
  * This Class makes the relationship between ivy and the palette.
@@ -18,31 +14,26 @@ import java.util.Scanner;
 
 public class IvyPaletteAgent {
     private Ivy bus;
-    private static Stroke stroke; // TODO delete
-    private  Action action;
+    //private static Stroke stroke; // TODO delete
     private String lastReleaseX;
     private String lastReleaseY;
-    private Gestes gestes; // TODO delete
+   // private Gestes gestes; // TODO delete
+    private Controller c;
 
-
-    public enum Action {
-        DELETE, RECLANGLE, ELLIPSE, MOVE, NOTHING
-    }
 
 
     public IvyPaletteAgent() throws IvyException { // TODO Put stroke in para
-        stroke = new Stroke();
-        stroke.init();
+        // stroke = new Stroke();
+        // stroke.init();
         bus = new Ivy("IvyPaletteAgent", "IvyPaletteAgent Ready", null);
         prete();
-        gestes = new Gestes(); // TODO in controller
+        // gestes = new Gestes(); // TODO in controller
         mousePressed();
         mouseReleased();
         mouseDragged();
         testPoint();
         testRectangle();
         bus.start(null);
-        action = Action.NOTHING;
         lastReleaseX = "0";
         lastReleaseY = "0";
         testRectangle();
@@ -73,10 +64,10 @@ public class IvyPaletteAgent {
             public void receive(IvyClient client, String[] args) {
                 String x = args[0];
                 String y = args[1];
-                stroke.init();
+               // stroke.init();
                 try {
                     bus.sendMsg("Mouse Pressed. x=" + x + " " + "y=" + y);
-                    stroke.addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
+                    c.getStroke().addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
                 } catch (IvyException e) {
                     e.printStackTrace();
                 }
@@ -93,12 +84,10 @@ public class IvyPaletteAgent {
             public void receive(IvyClient client, String[] args) {
                 lastReleaseX = args[0];
                 lastReleaseY = args[1];
-
                 try {
                     bus.sendMsg("Mouse released. x=" + lastReleaseX + " " + "y=" + lastReleaseY);
-                    stroke.addPoint(new Point2D.Double (Double.parseDouble(lastReleaseX),Double.parseDouble(lastReleaseY)));
-                    stroke.centroid = stroke.calculCentroid();
-                    analyseStroke(stroke);
+                    c.getStroke().addPoint(new Point2D.Double (Double.parseDouble(lastReleaseX),Double.parseDouble(lastReleaseY)));
+                    c.newMovement();
                 } catch (IvyException e) {
                     e.printStackTrace();
                 }
@@ -116,8 +105,7 @@ public class IvyPaletteAgent {
                 String x = args[0];
                 String y = args[1];
                 System.out.println("x:"+x+",y"+y);
-                //bus.sendMsg("Mouse dragged. x=" + x + " " + "y=" + y);
-                stroke.addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
+                c.getStroke().addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
             }
         });
     }
@@ -130,32 +118,14 @@ public class IvyPaletteAgent {
         bus.bindMsg(".*Palette:ResultatTesterPoint.*nom=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
                 String obj = args[0];
-                try {
-                    ApplyOnShape(obj);
-                } catch (IvyException e) {
-                    e.printStackTrace();
-                }
+                // TODO
+                // ApplyOnShape(obj);
             }
         });
     }
 
 
-    // TODO PUT IN Controller
-    /**
-     * Analyse and compare the template and the stroke.
-     * @param stroke
-     */
-    private void analyseStroke (Stroke stroke) throws IvyException {
-        int i;
-        int nbPts=0;
-        Double distance = 0.0;
-        System.out.println("Analysing stroke ...." );
-        stroke.normalize();
-        gestes. setTemplate();
-       // afficher(stroke);
-        determinerStrokeGests();
 
-    }
 
     private void afficher(Stroke stroke) {
         AffichageStroke affichageTemplate = new AffichageStroke(stroke);
@@ -163,62 +133,6 @@ public class IvyPaletteAgent {
         affichageFrame.add(affichageTemplate);
         affichageFrame.setVisible(true);
 
-    }
-
-    // TODO PUT IN Controller
-    private void determinerStrokeGests() throws IvyException {
-
-        switch (gestes.determinerStroke(stroke)){
-            case 1 : System.out.println("Supprimer");
-                action = Action.DELETE;
-                break;
-            case 2 : System.out.println("Rectangle");
-                action = Action.RECLANGLE;
-                ApplyOnShape("rectangle");
-                break;
-            case 3 : System.out.println("Ellipse");
-                action = Action.ELLIPSE;
-                ApplyOnShape("eclipse");
-                break;
-            case 4 : System.out.println("Deplacer");
-                action = Action.MOVE;
-                break;
-            default:
-                action = Action.NOTHING;
-        }
-
-    }
-
-    // TODO PUT IN Controller
-    private void ApplyOnShape (String obj) throws IvyException {
-        bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
-
-        switch (action) {
-            case DELETE:
-                System.out.println("DELETE "+ obj);
-                bus.sendMsg("Palette:SupprimerObject nom=" + obj);
-                // TODO delete object in model
-                break;
-            case RECLANGLE:
-                System.out.println("CREATION REC "+ obj);
-                bus.sendMsg("Palette:CreerRectangle x=30 y=30 longueur=100");
-                // TODO add object in model
-                break;
-            case ELLIPSE:
-                System.out.println("CREATION ELLIPSE "+ obj);
-                bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
-                // TODO add object in model
-                break;
-            case MOVE:
-                System.out.println("MOVE "+ obj);
-                bus.sendMsg("Palette:DeplacerObjet nom=" + obj + " x=300");
-                // TODO update object in model
-                break;
-            case NOTHING:
-                System.out.println("NONE SUPPORTED"+ obj);
-                break;
-
-        }
     }
 
     private void testRectangle () {
@@ -234,5 +148,26 @@ public class IvyPaletteAgent {
             System.out.println("dfgdhdfhgdxfhgdfhxdf");
             e.printStackTrace();
         }
+    }
+
+    public void register (Controller c) {
+        this.c = c;
+    }
+
+    // create shapes
+    public void delete(String obj) throws IvyException {
+        bus.sendMsg("Palette:SupprimerObject nom=" + obj);
+    }
+
+    public void creatRec(String obj) throws IvyException {
+        bus.sendMsg("Palette:CreerRectangle x=30 y=30 longueur=100");
+    }
+
+    public void creatEllipse(String obj) throws IvyException  {
+        bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
+    }
+
+    public void move(String obj)  throws IvyException {
+        bus.sendMsg("Palette:DeplacerObjet nom=" + obj + " x=300");
     }
 }

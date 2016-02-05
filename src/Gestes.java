@@ -50,7 +50,6 @@ public class Gestes {
                     ptY = scanner.nextDouble();
                     Point2D.Double point = new Point2D.Double(ptX,ptY);
                     template.listePoint.add(point);
-
                 }
                 catch (NoSuchElementException exception) {
                     break;
@@ -102,12 +101,11 @@ public class Gestes {
     /**
      * Determine what gestier has been made.
      * @param s
-     * @return the chosen action. (!) default TODO Supprimer
+     * @return the chosen action. (!) default move
      * @throws IvyException
      */
     public int determinerStroke(Stroke s) throws IvyException {
-        // TODO put default Deplacement XXX
-        Double d1 = calculerDistance(s, templateSupprimer);
+        Double d1 = calculerDistance(s, templateDeplacer);
         Double d2 = calculerDistance(s, templateRectangle);
         if (d2 < d1) {
             return 2;
@@ -116,7 +114,7 @@ public class Gestes {
         if ((d3 < d2) && (d3 < d1)) {
             return 3;
         }
-        Double d4 = calculerDistance(s, templateDeplacer);
+        Double d4 = calculerDistance(s, templateSupprimer);
         if ((d4 < d1) && (d4 < d2) && (d4 < d3)) {
             return 4;
         }

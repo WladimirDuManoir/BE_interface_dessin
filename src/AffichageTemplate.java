@@ -18,7 +18,6 @@ public class AffichageTemplate extends JComponent {
     Stroke templateDeplacer = new Stroke();
     int i;
 
-
     public AffichageTemplate() {
 
         templateSupprimer = lireFichier("templateSupprimer");
@@ -29,12 +28,10 @@ public class AffichageTemplate extends JComponent {
 
     private Stroke lireFichier(String nomFic){
         Stroke template = new Stroke();
-        try
-        {
+        try {
 
             File f = new File (nomFic);
             Scanner scanner = new Scanner (f);
-
             scanner.useLocale(Locale.US);
             scanner.useDelimiter(", |Point2D.Double\\[|\\]Point2D.Double\\[");
             Double ptX;
