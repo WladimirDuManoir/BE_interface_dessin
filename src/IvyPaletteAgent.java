@@ -15,9 +15,10 @@ import java.util.Scanner;
  * @author rooty
  */
 
+
 public class IvyPaletteAgent {
     private Ivy bus;
-    private Stroke stroke;
+    private static Stroke stroke; // TODO delete
     private  Action action;
     private String lastReleaseX;
     private String lastReleaseY;
@@ -26,12 +27,13 @@ public class IvyPaletteAgent {
     Stroke templateEllipse = new Stroke();
     Stroke templateDeplacer = new Stroke();
 
+
     public enum Action {
         DELETE, RECLANGLE, ELLIPSE, MOVE, NOTHING
     }
 
 
-    public IvyPaletteAgent() throws IvyException {
+    public IvyPaletteAgent() throws IvyException { // TODO Put stroke in para
         stroke = new Stroke();
         stroke.init();
         bus = new Ivy("IvyPaletteAgent", "IvyPaletteAgent Ready", null);
@@ -139,6 +141,8 @@ public class IvyPaletteAgent {
         });
     }
 
+
+    // TODO PUT IN Controller
     /**
      * Analyse and compare the template and the stroke.
      * @param stroke
@@ -163,7 +167,7 @@ public class IvyPaletteAgent {
 
     }
 
-
+    // TODO PUT IN Controller
     private void determinerStroke(Stroke s) throws IvyException {
         // XXX simplify code
         int formeReconnue = 1;
@@ -203,7 +207,7 @@ public class IvyPaletteAgent {
 
     }
 
-// TODO put elwar new classe  !!
+    // TODO PUT IN Controller
     private void ApplyOnShape (String obj) throws IvyException {
         bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
 
@@ -211,20 +215,22 @@ public class IvyPaletteAgent {
             case DELETE:
                 System.out.println("DELETE "+ obj);
                 bus.sendMsg("Palette:SupprimerObject nom=" + obj);
+                // TODO delete object in model
                 break;
             case RECLANGLE:
                 System.out.println("CREATION REC "+ obj);
                 bus.sendMsg("Palette:CreerRectangle x=30 y=30 longueur=100");
-
+                // TODO add object in model
                 break;
             case ELLIPSE:
                 System.out.println("CREATION ELLIPSE "+ obj);
                 bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
-
+                // TODO add object in model
                 break;
             case MOVE:
                 System.out.println("MOVE "+ obj);
                 bus.sendMsg("Palette:DeplacerObjet nom=" + obj + " x=300");
+                // TODO update object in model
                 break;
             case NOTHING:
                 System.out.println("NONE SUPPORTED"+ obj);
@@ -233,6 +239,7 @@ public class IvyPaletteAgent {
         }
     }
 
+    // TODO PUT IN Controller
     private Double calculerDistance(Stroke s1, Stroke s2){
         Double distance = 0.0;
         int i;
@@ -252,6 +259,7 @@ public class IvyPaletteAgent {
         return distance;
     }
 
+    // TODO PUT IN Reconnaissance de geste
     /**
      * Set up the template (List of points).
      */
@@ -262,6 +270,7 @@ public class IvyPaletteAgent {
         templateDeplacer = lireFichier("templateDeplacer");
     }
 
+    // TODO PUT IN Controller
     private Stroke lireFichier(String nomFic){
         Stroke template = new Stroke();
         try
@@ -300,6 +309,7 @@ public class IvyPaletteAgent {
         return template;
     }
 
+    // TODO PUT IN Reconnaissance de geste
     public void ecrireFichier(String nomFic, String texte)
     {
         //on va chercher le chemin et le nom du fichier et on me tout ca dans un String
