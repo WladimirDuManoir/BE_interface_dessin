@@ -18,10 +18,17 @@ import java.util.Scanner;
 public class IvyPaletteAgent {
     private Ivy bus;
     private Stroke stroke;
+    private  Action action;
+    private String lastReleaseX;
+    private String lastReleaseY;
     Stroke templateSupprimer = new Stroke();
     Stroke templateRectangle = new Stroke();
     Stroke templateEllipse = new Stroke();
     Stroke templateDeplacer = new Stroke();
+
+    public enum Action {
+        DELETE, RECLANGLE, ELLIPSE, MOVE, NOTHING
+    }
 
 
     public IvyPaletteAgent() throws IvyException {
@@ -35,6 +42,10 @@ public class IvyPaletteAgent {
         testPoint();
         testRectangle();
         bus.start(null);
+        action = Action.NOTHING;
+        lastReleaseX = "0";
+        lastReleaseY = "0";
+        testRectangle();
     }
 
     /**
@@ -80,14 +91,14 @@ public class IvyPaletteAgent {
     private void mouseReleased() throws IvyException {
         bus.bindMsg(".*MouseReleased x=(.*) y=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
-                String x = args[0];
-                String y = args[1];
+                lastReleaseX = args[0];
+                lastReleaseY = args[1];
+
                 try {
-                    bus.sendMsg("Mouse released. x=" + x + " " + "y=" + y);
-                    stroke.addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
+                    bus.sendMsg("Mouse released. x=" + lastReleaseX + " " + "y=" + lastReleaseY);
+                    stroke.addPoint(new Point2D.Double (Double.parseDouble(lastReleaseX),Double.parseDouble(lastReleaseY)));
+                    stroke.centroid = stroke.calculCentroid();
                     analyseStroke(stroke);
-                    //bus.sendMsg("Palette:CreerRectangle x=30"); // TODOELETE
-                     // TODOELETE
                 } catch (IvyException e) {
                     e.printStackTrace();
                 }
@@ -119,8 +130,11 @@ public class IvyPaletteAgent {
         bus.bindMsg(".*Palette:ResultatTesterPoint.*nom=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
                 String obj = args[0];
-                //System.out.println("Test point detected" );
-                  //  System.out.println("in try"+ obj.toString());
+                try {
+                    ApplyOnShape(obj);
+                } catch (IvyException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -151,6 +165,7 @@ public class IvyPaletteAgent {
 
 
     private void determinerStroke(Stroke s) throws IvyException {
+        // XXX simplify code
         int formeReconnue = 1;
         Double d1 = calculerDistance(stroke, templateSupprimer);
         Double d2 = calculerDistance(stroke, templateRectangle);
@@ -169,23 +184,53 @@ public class IvyPaletteAgent {
 
         switch (formeReconnue){
             case 1 : System.out.println("Supprimer");
-                //bus.sendMsg("Palette:CreerRectangle x=10 y=10");
-
+                action = Action.DELETE;
                 break;
             case 2 : System.out.println("Rectangle");
-                //bus.sendMsg("Palette:CreerRectangle x=50 y=50");
-
+                action = Action.RECLANGLE;
+                ApplyOnShape("rectangle");
                 break;
             case 3 : System.out.println("Ellipse");
-                //bus.sendMsg("Palette:CreerRectangle x=100 y=100");
-
+                action = Action.ELLIPSE;
+                ApplyOnShape("eclipse");
                 break;
             case 4 : System.out.println("Deplacer");
-                //bus.sendMsg("Palette:CreerRectangle x=150 y=150");
-
+                action = Action.MOVE;
                 break;
+            default:
+                action = Action.NOTHING;
         }
 
+    }
+
+// TODO put elwar new classe  !!
+    private void ApplyOnShape (String obj) throws IvyException {
+        bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
+
+        switch (action) {
+            case DELETE:
+                System.out.println("DELETE "+ obj);
+                bus.sendMsg("Palette:SupprimerObject nom=" + obj);
+                break;
+            case RECLANGLE:
+                System.out.println("CREATION REC "+ obj);
+                bus.sendMsg("Palette:CreerRectangle x=30 y=30 longueur=100");
+
+                break;
+            case ELLIPSE:
+                System.out.println("CREATION ELLIPSE "+ obj);
+                bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
+
+                break;
+            case MOVE:
+                System.out.println("MOVE "+ obj);
+                bus.sendMsg("Palette:DeplacerObjet nom=" + obj + " x=300");
+                break;
+            case NOTHING:
+                System.out.println("NONE SUPPORTED"+ obj);
+                break;
+
+        }
     }
 
     private Double calculerDistance(Stroke s1, Stroke s2){
