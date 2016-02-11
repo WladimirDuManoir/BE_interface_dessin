@@ -77,8 +77,7 @@ public class Audio implements IvyMessageListener {
     // In Controler
 
     public enum Color {
-        ROUGE, NOIR, VERT, BLEU,
-        VIOLET, ORANGE, JAUNE, ROSE, MARRON
+        ROUGE, JAUNE, VERT
     }
 
     public enum Object {
@@ -96,18 +95,32 @@ public class Audio implements IvyMessageListener {
      *
      * @param color
      */
-    public void color(String color){
+    public Color color(String color){
         System.out.println("Color _" + color+"_");
-
+        if (color.equals("rouge")) {
+            return Color.ROUGE;
+        } else if (color.equals("jaune")) {
+            return Color.JAUNE;
+        } else if (color.equals("vert")) {
+            return Color.VERT;
+        }
+        return Color.ROUGE;
     }
 
     /**
      *
      * @param objet
      */
-    public void object(String objet){
+    public Object object(String objet){
         System.out.println("Object _" + objet+"_");
-        // Case
+        if (objet.equals("rouge")) {
+            return Object.OBJECT;
+        } else if (objet.equals("jaune")) {
+            return Object.RECTANGLE;
+        } else if (objet.equals("vert")) {
+            return Object.ELLIPSE;
+        }
+        return Object.OBJECT;
     }
 
 }
