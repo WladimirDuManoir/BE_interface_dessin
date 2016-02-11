@@ -13,33 +13,26 @@
    <rule id="answer" scope="public"> 
     <ruleref special="GARBAGE" /> 
     <one-of>
+      <item><ruleref uri="#position"/></item>
       <item><ruleref uri="#color"/></item>
-      <item><ruleref uri="#initialiser"/></item>
       <item><ruleref uri="#object"/></item>
-      <item><ruleref uri="#ici"/></item>
-
     </one-of>          
     <tag>out = rules.latest().text;</tag>
     <ruleref special="GARBAGE" />
   </rule>
        
-   <rule id="color">
-    <item>couleur <ruleref uri="#thecolor"/></item>
+   <rule id="position">
+    <item>a cette position </item>
+      <tag>out.text  = "Position :" + meta.current().text;</tag>
   </rule> 
   
-  <rule id="initialiser">
-      <item>initialiser</item>
-      <tag>out.text  = "Action:" + meta.current().text;</tag>
-  </rule>
-
-   <rule id="ici">
-      <item>ici</item>
-      <tag>out.text  = "Position :" + meta.current().text;</tag>
+  <rule id="color">
+      <item>couleur <ruleref uri="#thecolor"/></item>
   </rule>
   
   <rule id="thecolor">
     <one-of>
-       <item>rouge</item>
+      <item>rouge</item>
       <item>noir</item>
       <item>vert</item>
       <item>bleu</item>
@@ -49,7 +42,7 @@
       <item>rose</item>
       <item>marron</item>
     </one-of>      
-    <tag>out.text  = "Color :" + meta.current().text;</tag>
+    <tag>out.text  = "Color triggered" + meta.current().text;</tag>
   </rule>
 
    <rule id="object">
