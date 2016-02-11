@@ -19,12 +19,18 @@ public class Controller {
     private Stroke stroke;
     private IvyPaletteAgent paletteAgent;
     private Gestes gestes;
+    private Audio audio;
 
     public Controller() {
         action = Action.NOTHING;
         gestes = new Gestes();
         this.stroke = new Stroke();
         stroke.init();
+        try {
+            audio = new Audio();
+        } catch (IvyException e) {
+            e.printStackTrace();
+        }
         try {
             this.paletteAgent = new IvyPaletteAgent();
         } catch (IvyException e) {
