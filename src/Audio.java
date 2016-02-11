@@ -7,6 +7,9 @@ public class Audio implements IvyMessageListener {
 
     private Ivy bus;
 
+    private Controller c;
+
+
     public Audio() throws IvyException {
         System.out.println("Audio Sarted");
         bus = new Ivy("IvyTranslater","IvyTranslater Ready",null);
@@ -17,7 +20,7 @@ public class Audio implements IvyMessageListener {
                 s = s.replace(',', '.');
                 float f = Float.parseFloat(s);
                 if (f >= 0.8) {
-                    move();
+                    c.move();
                 } else {
                     rienCompris(bus);
                 }
@@ -33,7 +36,7 @@ public class Audio implements IvyMessageListener {
                 confiance = confiance.replace(',', '.');
                 float f = Float.parseFloat(confiance);
                 if (f >= 0.8) {
-                    color(couleur);
+                    c.color(couleur);
                 }
                 else {
                     rienCompris(bus);
@@ -49,7 +52,7 @@ public class Audio implements IvyMessageListener {
                 confiance = confiance.replace(',', '.');
                 float f = Float.parseFloat(confiance);
                 if (f >= 0.8) {
-                    object(s);
+                    c.object(s);
                 }
                 else {
                     rienCompris(bus);
@@ -73,54 +76,8 @@ public class Audio implements IvyMessageListener {
 
     }
 
-
-    // In Controler
-
-    public enum Color {
-        ROUGE, JAUNE, VERT
-    }
-
-    public enum Object {
-        OBJECT, RECTANGLE, ELLIPSE
-    }
-
-    /**
-     *
-     */
-    public void move() {
-        System.out.println("Move");
-    }
-
-    /**
-     *
-     * @param color
-     */
-    public Color color(String color){
-        System.out.println("Color _" + color+"_");
-        if (color.equals("rouge")) {
-            return Color.ROUGE;
-        } else if (color.equals("jaune")) {
-            return Color.JAUNE;
-        } else if (color.equals("vert")) {
-            return Color.VERT;
-        }
-        return Color.ROUGE;
-    }
-
-    /**
-     *
-     * @param objet
-     */
-    public Object object(String objet){
-        System.out.println("Object _" + objet+"_");
-        if (objet.equals("rouge")) {
-            return Object.OBJECT;
-        } else if (objet.equals("jaune")) {
-            return Object.RECTANGLE;
-        } else if (objet.equals("vert")) {
-            return Object.ELLIPSE;
-        }
-        return Object.OBJECT;
+    public void register (Controller c) {
+        this.c = c;
     }
 
 }

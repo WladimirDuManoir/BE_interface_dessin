@@ -37,6 +37,7 @@ public class Controller {
             e.printStackTrace();
         }
         paletteAgent.register(this);
+        audio.register(this);
     }
 
     public Stroke getStroke() {
@@ -111,7 +112,6 @@ public class Controller {
         System.out.println("Analysing stroke ...." );
         stroke.normalize();
         gestes.setTemplate();
-        stroke.afficher();
         determinerStrokeGestes();
 
     }
@@ -119,5 +119,56 @@ public class Controller {
     public void newMovement () throws IvyException {
         this.stroke = new Stroke();
         stroke.init();
+    }
+
+    // Audio
+
+    public enum Color {
+        ROUGE, JAUNE, VERT, BLEU
+    }
+
+    public enum Object {
+        OBJECT, RECTANGLE, ELLIPSE
+    }
+
+    /**
+     *
+     */
+    public void move() {
+        System.out.println("Move");
+    }
+
+    /**
+     *
+     * @param color
+     */
+    public Color color(String color){
+        System.out.println("Color _" + color+"_");
+        if (color.equals("rouge")) {
+            return Color.ROUGE;
+        } else if (color.equals("jaune")) {
+            return Color.JAUNE;
+        } else if (color.equals("vert")) {
+            return Color.VERT;
+        } else if (color.equals("bleu")){
+            return Color.BLEU;
+        }
+        return Color.ROUGE;
+    }
+
+    /**
+     *
+     * @param objet
+     */
+    public Object object(String objet){
+        System.out.println("Object _" + objet+"_");
+        if (objet.equals("rouge")) {
+            return Object.OBJECT;
+        } else if (objet.equals("jaune")) {
+            return Object.RECTANGLE;
+        } else if (objet.equals("vert")) {
+            return Object.ELLIPSE;
+        }
+        return Object.OBJECT;
     }
 }
