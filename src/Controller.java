@@ -44,8 +44,8 @@ public class Controller {
     private void determinerStrokeGests() throws IvyException {
         switch (gestes.determinerStroke(stroke)) {
             case 1 :
-                System.out.println("Deplacer");
-                action = Action.MOVE;
+                System.out.println("Supprimer");
+                action = Action.DELETE;
                 break;
             case 2 :
                 System.out.println("Rectangle");
@@ -58,8 +58,8 @@ public class Controller {
                 ApplyOnShape("eclipse");
                 break;
             case 4 :
-                System.out.println("Supprimer");
-                action = Action.DELETE;
+                System.out.println("Deplacer");
+                action = Action.MOVE;
                 break;
             default:
                 action = Action.NOTHING;
@@ -98,19 +98,20 @@ public class Controller {
      * Analyse and compare the template and the stroke.
      * @param stroke
      */
-    private void analyseStroke (Stroke stroke) throws IvyException {
+    public  void analyseStroke (Stroke stroke) throws IvyException {
         int i;
         int nbPts=0;
         Double distance = 0.0;
         System.out.println("Analysing stroke ...." );
         stroke.normalize();
         gestes.setTemplate();
-        // afficher(stroke);
+        stroke.afficher();
         determinerStrokeGests();
+
     }
 
     public void newMovement () throws IvyException {
-        stroke.centroid =  stroke.calculCentroid();
-        analyseStroke(stroke);
+        this.stroke = new Stroke();
+        stroke.init();
     }
 }

@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -27,7 +28,16 @@ public class Stroke {
 			return true;
 		return false;
 	}
-	
+
+
+	public void afficher() {
+		AffichageStroke affichageTemplate = new AffichageStroke(this);
+		JFrame affichageFrame = new JFrame();
+		affichageFrame.add(affichageTemplate);
+		affichageFrame.setVisible(true);
+
+	}
+
 	public int size()
 	{
 		return listePoint.size();

@@ -105,7 +105,7 @@ public class Gestes {
      * @throws IvyException
      */
     public int determinerStroke(Stroke s) throws IvyException {
-        Double d1 = calculerDistance(s, templateDeplacer);
+        Double d1 = calculerDistance(s,templateSupprimer);
         Double d2 = calculerDistance(s, templateRectangle);
         if (d2 < d1) {
             return 2;
@@ -114,7 +114,7 @@ public class Gestes {
         if ((d3 < d2) && (d3 < d1)) {
             return 3;
         }
-        Double d4 = calculerDistance(s, templateSupprimer);
+        Double d4 = calculerDistance(s, templateDeplacer);
         if ((d4 < d1) && (d4 < d2) && (d4 < d3)) {
             return 4;
         }
@@ -137,6 +137,7 @@ public class Gestes {
             ajout = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
             distance += ajout;
         }
+        System.out.println(distance);
         return distance;
     }
 

@@ -64,8 +64,10 @@ public class IvyPaletteAgent {
             public void receive(IvyClient client, String[] args) {
                 String x = args[0];
                 String y = args[1];
-               // stroke.init();
+
                 try {
+                    c.newMovement();
+                    c.getStroke().init();
                     bus.sendMsg("Mouse Pressed. x=" + x + " " + "y=" + y);
                     c.getStroke().addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
                 } catch (IvyException e) {
@@ -87,7 +89,7 @@ public class IvyPaletteAgent {
                 try {
                     bus.sendMsg("Mouse released. x=" + lastReleaseX + " " + "y=" + lastReleaseY);
                     c.getStroke().addPoint(new Point2D.Double (Double.parseDouble(lastReleaseX),Double.parseDouble(lastReleaseY)));
-                    c.newMovement();
+                    c.analyseStroke(c.getStroke());
                 } catch (IvyException e) {
                     e.printStackTrace();
                 }
@@ -106,6 +108,7 @@ public class IvyPaletteAgent {
                 String y = args[1];
                 System.out.println("x:"+x+",y"+y);
                 c.getStroke().addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
+
             }
         });
     }
@@ -127,13 +130,6 @@ public class IvyPaletteAgent {
 
 
 
-    private void afficher(Stroke stroke) {
-        AffichageStroke affichageTemplate = new AffichageStroke(stroke);
-        JFrame affichageFrame = new JFrame();
-        affichageFrame.add(affichageTemplate);
-        affichageFrame.setVisible(true);
-
-    }
 
     private void testRectangle () {
         try {
