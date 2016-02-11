@@ -41,7 +41,7 @@ public class Controller {
         this.stroke = stroke;
     }
 
-    private void determinerStrokeGests() throws IvyException {
+    private void determinerStrokeGestes() throws IvyException {
         switch (gestes.determinerStroke(stroke)) {
             case 1 :
                 System.out.println("Supprimer");
@@ -106,7 +106,7 @@ public class Controller {
         stroke.normalize();
         gestes.setTemplate();
         stroke.afficher();
-        determinerStrokeGests();
+        determinerStrokeGestes();
 
     }
 

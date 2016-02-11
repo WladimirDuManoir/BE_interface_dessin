@@ -99,7 +99,7 @@ public class Gestes {
     }
 
     /**
-     * Determine what gestier has been made.
+     * Determine what gesture has been made.
      * @param s
      * @return the chosen action. (!) default move
      * @throws IvyException
@@ -107,18 +107,19 @@ public class Gestes {
     public int determinerStroke(Stroke s) throws IvyException {
         Double d1 = calculerDistance(s,templateSupprimer);
         Double d2 = calculerDistance(s, templateRectangle);
+        int distance = 1;
         if (d2 < d1) {
-            return 2;
+            distance = 2;
         }
         Double d3 = calculerDistance(s, templateEllipse);
         if ((d3 < d2) && (d3 < d1)) {
-            return 3;
+            distance = 3;
         }
         Double d4 = calculerDistance(s, templateDeplacer);
         if ((d4 < d1) && (d4 < d2) && (d4 < d3)) {
-            return 4;
+            distance = 4;
         }
-        return 1;
+        return distance;
     }
 
     private Double calculerDistance(Stroke s1, Stroke s2){
