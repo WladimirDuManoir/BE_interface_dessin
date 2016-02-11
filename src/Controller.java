@@ -1,8 +1,5 @@
 import fr.dgac.ivy.IvyException;
 
-import java.util.Observable;
-import java.util.Observer;
-
 /**
  * Created by rooty on 22/01/2016.
  * Manages all the interactions between the different modules.
@@ -13,9 +10,9 @@ public class Controller {
     // TODO Create emum for the diff states
     // Create Automate
     // do audio interaction
-    
+
     public enum Action {
-        DELETE, RECLANGLE, ELLIPSE, MOVE, NOTHING
+        DELETE, RECTANGLE, ELLIPSE, MOVE, NOTHING
     }
 
     private Action action;
@@ -52,7 +49,7 @@ public class Controller {
                 break;
             case 2 :
                 System.out.println("Rectangle");
-                action = Action.RECLANGLE;
+                action = Action.RECTANGLE;
                 ApplyOnShape("rectangle");
                 break;
             case 3 :
@@ -76,7 +73,7 @@ public class Controller {
                 paletteAgent.delete(obj);
                 // TODO delete object in model
                 break;
-            case RECLANGLE:
+            case RECTANGLE:
                 System.out.println("CREATION REC "+ obj);
                 paletteAgent.creatRec(obj);
                 // TODO add object in model
