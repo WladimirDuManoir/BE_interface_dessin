@@ -1,5 +1,6 @@
 import fr.dgac.ivy.IvyException;
 
+import java.awt.geom.Point2D;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,7 +47,28 @@ public class Controller {
     private Timer timer_position;
     private Timer timer_suprimer;
 
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+    private int posX;
+    private int posY;
+
     public Controller() {
+posX = 0;
+        posY = 0;
         state = State.E_INIT;
         action = Action.NOTHING;
         SetAllTimer();
@@ -70,13 +92,13 @@ public class Controller {
 
     public void SetAllTimer() {
         timer_couleur = new Timer();
-        timer_couleur.schedule(new TimerTaskColor(), 1 * 1000);
+        timer_couleur.schedule(new TimerTaskColor(), 3 * 1000);
         timer_creerObjet = new Timer();
-        timer_creerObjet.schedule(new TimerTaskObject(), 1 * 1000);
+        timer_creerObjet.schedule(new TimerTaskObject(), 3 * 1000);
         timer_position = new Timer();
-        timer_position.schedule(new TimerTaskPosition(), 1 * 1000);
+        timer_position.schedule(new TimerTaskPosition(), 3 * 1000);
         timer_suprimer = new Timer();
-        timer_suprimer.schedule(new TimerTaskSupprimer(), 1 * 1000);
+        timer_suprimer.schedule(new TimerTaskSupprimer(), 3 * 1000);
     }
 
     public void StopAllTimer() {
@@ -217,7 +239,6 @@ public class Controller {
         stroke.normalize();
         gestes.setTemplate();
         determinerStrokeGestes();
-
     }
 
     public void newMovement () throws IvyException {
@@ -240,13 +261,14 @@ public class Controller {
      */
     public void move() throws IvyException {
         System.out.println("Move");
+        Point2D pt = new Point2D((double) posX,(double) posY);
 
         switch (state) {
             case E_INIT:
                 break;
             case E_COULEUR:
                 goToState(state.E_INIT, couleur, objet);
-                paletteAgent.creerObjet(objet, couleur, stroke.getPoint(0));
+                paletteAgent.creerObjet(objet, couleur, pt));
                 //TODO Creer objet(objet, couleur, position)
                 break;
             case E_CREER_OBJET:
@@ -291,6 +313,7 @@ public class Controller {
                     goToState(state.E_COULEUR, couleur, objet);
                     break;
                 case E_POSITION:
+                    couleur = Color.ROUGE;
                     goToState(state.E_INIT, Color.ROUGE, objet);
                     //TODO Creer objet(objet, couleur, position)
                     break;
@@ -320,9 +343,12 @@ public class Controller {
                 case E_COULEUR:
                     break;
                 case E_CREER_OBJET:
+                    couleur = Color.JAUNE;
                     goToState(state.E_COULEUR, Color.JAUNE, objet);
                     break;
                 case E_POSITION:
+                    couleur = Color.JAUNE;
+
                     goToState(state.E_INIT, Color.JAUNE, objet);
                     //TODO Creer objet(objet, couleur, position)
                     break;
@@ -341,12 +367,10 @@ public class Controller {
                 default:
                     System.out.println("Not in State Ennum");
                     break;
-
             }
             return Color.JAUNE;
 
         } else if (color.equals("vert")) {
-
 
             switch (state) {
                 case E_INIT:
@@ -354,9 +378,13 @@ public class Controller {
                 case E_COULEUR:
                     break;
                 case E_CREER_OBJET:
+                    couleur = Color.VERT;
+
                     goToState(state.E_COULEUR, Color.VERT, objet);
                     break;
                 case E_POSITION:
+                    couleur = Color.VERT;
+
                     goToState(state.E_INIT, Color.VERT, objet);
                     //TODO Creer objet(objet, couleur, position)
                     break;
@@ -390,6 +418,7 @@ public class Controller {
                     goToState(state.E_COULEUR, Color.BLEU, objet);
                     break;
                 case E_POSITION:
+                    couleur = Color.BLEU;
                     goToState(state.E_INIT, Color.BLEU, objet);
                     //TODO Creer objet(objet, couleur, position)
                     break;
