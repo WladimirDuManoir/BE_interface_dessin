@@ -375,8 +375,6 @@ public class Controller {
                 default:
                     System.out.println("Not in State Ennum");
                     break;
-
-
             }
             return Color.VERT;
 
@@ -432,7 +430,6 @@ public class Controller {
                     break;
                 case E_POSITION:
                     break;
-
                 case E_DEPLACER_OBJ:
                     break;
                 case E_DEPLACER_POS:
@@ -447,6 +444,7 @@ public class Controller {
                 default:
                     System.out.println("Not in State Ennum");
                     break;
+
             }
         } else if (objet.equals("ce rectangle")) {
             switch (state) {
@@ -465,7 +463,6 @@ public class Controller {
                     break;
                 case E_DEPLACER:
                     break;
-
                 case E_SUPPRIMER_COL:
                     break;
                 case E_SUPPRIMER:
