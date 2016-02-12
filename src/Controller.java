@@ -223,7 +223,6 @@ posX = 0;
                 goToState(State.E_DEPLACER, Color.NULL, Object.NULL);
                 break;
             default:
-                action = Action.NOTHING;
         }
     }
 
@@ -450,7 +449,7 @@ posX = 0;
      */
     public void object(String objet){
         System.out.println("Object _" + objet + "_");
-        if (objet.equals("cet objet")) {
+        if (objet.equals("cet objet ")) {
             switch (state) {
                 case E_INIT:
                     break;

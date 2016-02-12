@@ -109,7 +109,6 @@ public class IvyPaletteAgent {
             public void receive(IvyClient client, String[] args) {
                 String x = args[0];
                 String y = args[1];
-//                System.out.println("x:"+x+",y"+y);
                 c.getStroke().addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
 
             }
