@@ -49,23 +49,6 @@ public class Controller {
     private int posX;
     private int posY;
 
-    public int getPosX() {
-        return posX;
-    }
-
-    public void setPosX(int posX) {
-        this.posX = posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    public void setPosY(int posY) {
-        this.posY = posY;
-    }
-
-
 
     public Controller() {
         posX = 0;
@@ -88,8 +71,29 @@ public class Controller {
         }
         paletteAgent.register(this);
         audio.register(this);
+        try {
+            paletteAgent.testPoint();
+        } catch (IvyException e) {
+            e.printStackTrace();
+        }
+
     }
 
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
 
     public void StartTimerColor() {
         timer_couleur.schedule(new TimerTaskColor(), 3 * 1000);
@@ -164,7 +168,6 @@ public class Controller {
                 System.out.println("Go to state CREEROBJET");
                 StopAllTimer();
                 timer_creerObjet.purge();
-                State
                 state = State.E_CREER_OBJET;
                 break;
             case E_POSITION:

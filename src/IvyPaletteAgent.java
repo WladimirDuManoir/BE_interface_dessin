@@ -32,8 +32,6 @@ public class IvyPaletteAgent {
         mousePressed();
         mouseReleased();
         mouseDragged();
-        testPoint();
-        testRectangle();
         bus.start(null);
         lastReleaseX = "0";
         lastReleaseY = "0";
@@ -132,10 +130,9 @@ public class IvyPaletteAgent {
      * This check if the palette has a figure in a specific point.
      * @throws IvyException
      */
-    private void testPoint() throws IvyException {
+    public void testPoint() throws IvyException{
         bus.sendMsg(".*Palette:TesterPoint x=" + c.getPosX() + " y=" + c.getPosY());
     }
-
 
     private void testRectangle () {
         try {
