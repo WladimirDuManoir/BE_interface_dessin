@@ -67,6 +67,8 @@ public class IvyPaletteAgent {
                 String y = args[1];
 
                 try {
+                    c.setPosX(Integer.parseInt(x));
+                    c.setPosY(Integer.parseInt(y));
                     c.newMovement();
                     c.getStroke().init();
                     bus.sendMsg("Mouse Pressed. x=" + x + " " + "y=" + y);
