@@ -471,7 +471,7 @@ posX = 0;
                     goToState(state.E_SUPPRIMER_COL, Color.NULL, Object.OBJECT);
                     break;
                 default:
-                    System.out.println("Not in State Ennum");
+                    System.err.println("Not in State Ennum");
                     break;
 
             }
