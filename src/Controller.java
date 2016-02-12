@@ -67,7 +67,7 @@ public class Controller {
     private int posY;
 
     public Controller() {
-posX = 0;
+        posX = 0;
         posY = 0;
         state = State.E_INIT;
         action = Action.NOTHING;
@@ -90,18 +90,28 @@ posX = 0;
     }
 
 
-    public void SetAllTimer() {
-        timer_couleur = new Timer();
+    public void StartTimerColor() {
         timer_couleur.schedule(new TimerTaskColor(), 3 * 1000);
-        timer_creerObjet = new Timer();
+    }
+    public void StartTimerObject() {
         timer_creerObjet.schedule(new TimerTaskObject(), 3 * 1000);
-        timer_position = new Timer();
+    }
+    public void StartTimerPosition() {
         timer_position.schedule(new TimerTaskPosition(), 3 * 1000);
-        timer_suprimer = new Timer();
+    }
+    public void StartTimerSupprimer() {
         timer_suprimer.schedule(new TimerTaskSupprimer(), 3 * 1000);
     }
 
-    public void StopAllTimer() {
+    public void SetAllTimer() {
+        timer_couleur = new Timer();
+        timer_creerObjet = new Timer();
+        timer_position = new Timer();
+        timer_suprimer = new Timer();
+    }
+
+
+        public void StopAllTimer() {
         timer_couleur.cancel();
         timer_creerObjet.cancel();
         timer_position.cancel();
@@ -152,6 +162,8 @@ posX = 0;
             case E_CREER_OBJET:
                 System.out.println("Go to state CREEROBJET");
                 StopAllTimer();
+                timer_creerObjet.purge();
+                State
                 state = State.E_CREER_OBJET;
                 break;
             case E_POSITION:
@@ -259,16 +271,16 @@ posX = 0;
     /**
      *
      */
-    public void move() throws IvyException {
+    public void position() throws IvyException {
         System.out.println("Move");
-        Point2D pt = new Point2D((double) posX,(double) posY);
+        Point2D.Double pt = new Point2D.Double((double) posX,(double) posY);
 
         switch (state) {
             case E_INIT:
                 break;
             case E_COULEUR:
                 goToState(state.E_INIT, couleur, objet);
-                paletteAgent.creerObjet(objet, couleur, pt));
+                paletteAgent.creerObjet(objet, couleur, pt);
                 //TODO Creer objet(objet, couleur, position)
                 break;
             case E_CREER_OBJET:
@@ -463,6 +475,7 @@ posX = 0;
                 case E_DEPLACER_OBJ:
                     break;
                 case E_DEPLACER_POS:
+                    goToState(state.E_INIT, Color.NULL, Object.OBJECT);
                     break;
                 case E_DEPLACER:
                     goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.OBJECT);
@@ -491,6 +504,7 @@ posX = 0;
                 case E_DEPLACER_OBJ:
                     break;
                 case E_DEPLACER_POS:
+                    goToState(state.E_INIT, Color.NULL, Object.RECTANGLE);
                     break;
                 case E_DEPLACER:
                     goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.RECTANGLE);
