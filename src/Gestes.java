@@ -105,6 +105,10 @@ public class Gestes {
      * @throws IvyException
      */
     public Controller.Action determinerStroke(Stroke s) throws IvyException {
+        if (Double.isNaN(s.getPathLength())){
+            return Controller.Action.CLICK;
+        }
+
         Double d1 = calculerDistance(s,templateSupprimer);
         Double d2 = calculerDistance(s, templateRectangle);
         Controller.Action action = Controller.Action.DELETE;

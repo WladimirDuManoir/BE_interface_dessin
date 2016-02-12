@@ -16,7 +16,7 @@ public class Controller {
     // do audio interaction
 
     public enum Action {
-        DELETE, RECTANGLE, ELLIPSE, MOVE, NOTHING
+        DELETE, RECTANGLE, ELLIPSE, MOVE, NOTHING, CLICK
     }
 
     public enum State {
@@ -46,6 +46,8 @@ public class Controller {
     private Timer timer_creerObjet;
     private Timer timer_position;
     private Timer timer_suprimer;
+    private int posX;
+    private int posY;
 
     public int getPosX() {
         return posX;
@@ -63,8 +65,7 @@ public class Controller {
         this.posY = posY;
     }
 
-    private int posX;
-    private int posY;
+
 
     public Controller() {
 posX = 0;
@@ -201,8 +202,6 @@ posX = 0;
         this.stroke = stroke;
     }
 
-
-
     private void determinerStrokeGestes() throws IvyException {
         switch (gestes.determinerStroke(stroke)) {
             case DELETE:
@@ -261,15 +260,14 @@ posX = 0;
      */
     public void move() throws IvyException {
         System.out.println("Move");
-        Point2D pt = new Point2D((double) posX,(double) posY);
-
+        Point2D.Double pt = new Point2D.Double((double) posX,(double) posY);
+        System.out.println(state);
         switch (state) {
             case E_INIT:
                 break;
             case E_COULEUR:
                 goToState(state.E_INIT, couleur, objet);
-                paletteAgent.creerObjet(objet, couleur, pt));
-                //TODO Creer objet(objet, couleur, position)
+                paletteAgent.creerObjet(objet, couleur, pt);
                 break;
             case E_CREER_OBJET:
                 goToState(state.E_POSITION, Color.NULL, objet);
@@ -315,7 +313,6 @@ posX = 0;
                 case E_POSITION:
                     couleur = Color.ROUGE;
                     goToState(state.E_INIT, Color.ROUGE, objet);
-                    //TODO Creer objet(objet, couleur, position)
                     break;
                 case E_DEPLACER_OBJ:
                     break;

@@ -34,7 +34,7 @@
 
    <rule id="ici">
       <item>ici</item>
-      <tag>out.text  = "Position :" + meta.current().text;</tag>
+      <tag>out.text  = "Position : ici ";</tag>
   </rule>
   
   <rule id="thecolor">
