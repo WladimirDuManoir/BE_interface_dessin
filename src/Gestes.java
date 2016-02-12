@@ -104,22 +104,22 @@ public class Gestes {
      * @return the chosen action. (!) default move
      * @throws IvyException
      */
-    public int determinerStroke(Stroke s) throws IvyException {
+    public Controller.Action determinerStroke(Stroke s) throws IvyException {
         Double d1 = calculerDistance(s,templateSupprimer);
         Double d2 = calculerDistance(s, templateRectangle);
-        int distance = 1;
+        Controller.Action action = Controller.Action.DELETE;
         if (d2 < d1) {
-            distance = 2;
+            action = Controller.Action.RECTANGLE;
         }
         Double d3 = calculerDistance(s, templateEllipse);
         if ((d3 < d2) && (d3 < d1)) {
-            distance = 3;
+            action = Controller.Action.ELLIPSE;
         }
         Double d4 = calculerDistance(s, templateDeplacer);
         if ((d4 < d1) && (d4 < d2) && (d4 < d3)) {
-            distance = 4;
+            action = Controller.Action.MOVE;
         }
-        return distance;
+        return action;
     }
 
     private Double calculerDistance(Stroke s1, Stroke s2){
@@ -138,7 +138,7 @@ public class Gestes {
             ajout = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
             distance += ajout;
         }
-        System.out.println(distance);
+//        System.out.println(distance);
         return distance;
     }
 

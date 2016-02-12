@@ -17,6 +17,7 @@ public class Controller {
     public enum Action {
         DELETE, RECTANGLE, ELLIPSE, MOVE, NOTHING
     }
+
     public enum State {
         E_INIT,
 
@@ -69,13 +70,13 @@ public class Controller {
 
     public void SetAllTimer() {
         timer_couleur = new Timer();
-        timer_couleur.schedule(new TimerTaskColor(), 1000 * 1000);
+        timer_couleur.schedule(new TimerTaskColor(), 1 * 1000);
         timer_creerObjet = new Timer();
-        timer_creerObjet.schedule(new TimerTaskObject(), 1000 * 1000);
+        timer_creerObjet.schedule(new TimerTaskObject(), 1 * 1000);
         timer_position = new Timer();
-        timer_position.schedule(new TimerTaskPosition(), 1000 * 1000);
+        timer_position.schedule(new TimerTaskPosition(), 1 * 1000);
         timer_suprimer = new Timer();
-        timer_suprimer.schedule(new TimerTaskSupprimer(), 1000 * 1000);
+        timer_suprimer.schedule(new TimerTaskSupprimer(), 1 * 1000);
     }
 
     public void StopAllTimer() {
@@ -182,61 +183,26 @@ public class Controller {
 
     private void determinerStrokeGestes() throws IvyException {
         switch (gestes.determinerStroke(stroke)) {
-            case 1 :
+            case DELETE:
                 System.out.println("Supprimer");
                 goToState(State.E_SUPPRIMER, Color.NULL, Object.NULL);
-                action = Action.DELETE;
-
                 break;
-            case 2 :
+            case RECTANGLE:
                 System.out.println("Rectangle");
-                goToState(State.E_CREER_OBJET, Color.NULL, Object.RECTANGLE);
                 objet = Object.RECTANGLE;
-                action = Action.RECTANGLE;
-                ApplyOnShape("rectangle");
+                goToState(State.E_CREER_OBJET, Color.NULL, Object.RECTANGLE);
                 break;
-            case 3 :
+            case ELLIPSE:
                 System.out.println("Ellipse");
-                goToState(State.E_CREER_OBJET, Color.NULL, Object.ELLIPSE);
                 objet = Object.ELLIPSE;
-                action = Action.ELLIPSE;
-                ApplyOnShape("eclipse");
+                goToState(State.E_CREER_OBJET, Color.NULL, Object.ELLIPSE);
                 break;
-            case 4 :
+            case MOVE :
                 System.out.println("Deplacer");
                 goToState(State.E_DEPLACER, Color.NULL, Object.NULL);
-                action = Action.MOVE;
                 break;
             default:
                 action = Action.NOTHING;
-        }
-    }
-
-    private void ApplyOnShape (String obj) throws IvyException {
-        switch (action) {
-            case DELETE:
-                System.out.println("DELETE "+ obj);
-                paletteAgent.delete(obj);
-                // TODO delete object in model
-                break;
-            case RECTANGLE:
-                System.out.println("CREATION REC "+ obj);
-                paletteAgent.creatRec(obj);
-                // TODO add object in model
-                break;
-            case ELLIPSE:
-                System.out.println("CREATION ELLIPSE "+ obj);
-                paletteAgent.creatEllipse(obj);
-                // TODO add object in model
-                break;
-            case MOVE:
-                System.out.println("MOVE "+ obj);
-                paletteAgent.move(obj);
-                // TODO update object in model
-                break;
-            case NOTHING:
-                System.out.println("NONE SUPPORTED"+ obj);
-                break;
         }
     }
 
@@ -273,7 +239,7 @@ public class Controller {
     /**
      *
      */
-    public void move() {
+    public void move() throws IvyException {
         System.out.println("Move");
 
         switch (state) {
@@ -281,6 +247,7 @@ public class Controller {
                 break;
             case E_COULEUR:
                 goToState(state.E_INIT, couleur, objet);
+                paletteAgent.creerObjet(objet, couleur, stroke.getPoint(0));
                 //TODO Creer objet(objet, couleur, position)
                 break;
             case E_CREER_OBJET:

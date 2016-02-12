@@ -20,7 +20,11 @@ public class Audio implements IvyMessageListener {
                 s = s.replace(',', '.');
                 float f = Float.parseFloat(s);
                 if (f >= 0.8) {
-                    c.move();
+                    try {
+                        c.move();
+                    } catch (IvyException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     rienCompris(bus);
                 }
