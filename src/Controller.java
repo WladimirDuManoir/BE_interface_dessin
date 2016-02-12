@@ -181,58 +181,24 @@ public class Controller {
             case 1 :
                 System.out.println("Supprimer");
                 goToState(State.E_SUPPRIMER, Color.NULL, Object.NULL);
-                action = Action.DELETE;
 
                 break;
             case 2 :
                 System.out.println("Rectangle");
                 goToState(State.E_CREER_OBJET, Color.NULL, Object.RECTANGLE);
-                action = Action.RECTANGLE;
-                ApplyOnShape("rectangle");
                 break;
             case 3 :
                 System.out.println("Ellipse");
                 goToState(State.E_CREER_OBJET, Color.NULL, Object.ELLIPSE);
-                action = Action.ELLIPSE;
-                ApplyOnShape("eclipse");
                 break;
             case 4 :
                 System.out.println("Deplacer");
                 goToState(State.E_DEPLACER, Color.NULL, Object.NULL);
-                action = Action.MOVE;
                 break;
             default:
-                action = Action.NOTHING;
         }
     }
 
-    private void ApplyOnShape (String obj) throws IvyException {
-        switch (action) {
-            case DELETE:
-                System.out.println("DELETE "+ obj);
-                paletteAgent.delete(obj);
-                // TODO delete object in model
-                break;
-            case RECTANGLE:
-                System.out.println("CREATION REC "+ obj);
-                paletteAgent.creatRec(obj);
-                // TODO add object in model
-                break;
-            case ELLIPSE:
-                System.out.println("CREATION ELLIPSE "+ obj);
-                paletteAgent.creatEllipse(obj);
-                // TODO add object in model
-                break;
-            case MOVE:
-                System.out.println("MOVE "+ obj);
-                paletteAgent.move(obj);
-                // TODO update object in model
-                break;
-            case NOTHING:
-                System.out.println("NONE SUPPORTED"+ obj);
-                break;
-        }
-    }
 
     /**
      * Analyse and compare the template and the stroke.
@@ -295,7 +261,7 @@ public class Controller {
      */
     public void object(String objet){
         System.out.println("Object _" + objet + "_");
-        if (objet.equals("cet objet")) {
+        if (objet.equals("cet objet ")) {
             switch (state) {
                 case E_INIT:
                     break;
