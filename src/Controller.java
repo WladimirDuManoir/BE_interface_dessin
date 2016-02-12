@@ -1,5 +1,6 @@
 import fr.dgac.ivy.IvyException;
 
+import java.awt.geom.Point2D;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -260,13 +261,14 @@ posX = 0;
      */
     public void move() throws IvyException {
         System.out.println("Move");
+        Point2D pt = new Point2D((double) posX,(double) posY);
 
         switch (state) {
             case E_INIT:
                 break;
             case E_COULEUR:
                 goToState(state.E_INIT, couleur, objet);
-                paletteAgent.creerObjet(objet, couleur, stroke.getPoint(0));
+                paletteAgent.creerObjet(objet, couleur, pt));
                 //TODO Creer objet(objet, couleur, position)
                 break;
             case E_CREER_OBJET:
@@ -308,7 +310,7 @@ posX = 0;
                     break;
                 case E_CREER_OBJET:
                     couleur = Color.ROUGE;
-                    goToState(state.E_COULEUR, Color.ROUGE, objet);
+                    goToState(state.E_COULEUR, couleur, objet);
                     break;
                 case E_POSITION:
                     couleur = Color.ROUGE;
@@ -342,7 +344,6 @@ posX = 0;
                     break;
                 case E_CREER_OBJET:
                     couleur = Color.JAUNE;
-
                     goToState(state.E_COULEUR, Color.JAUNE, objet);
                     break;
                 case E_POSITION:
@@ -464,6 +465,7 @@ posX = 0;
                 case E_DEPLACER_POS:
                     break;
                 case E_DEPLACER:
+                    goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.OBJECT);
                     break;
                 case E_SUPPRIMER_COL:
                     break;
@@ -491,6 +493,7 @@ posX = 0;
                 case E_DEPLACER_POS:
                     break;
                 case E_DEPLACER:
+                    goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.RECTANGLE);
                     break;
                 case E_SUPPRIMER_COL:
                     break;
@@ -515,8 +518,10 @@ posX = 0;
                 case E_DEPLACER_OBJ:
                     break;
                 case E_DEPLACER_POS:
+                    goToState(state.E_INIT, Color.NULL, Object.ELLIPSE);
                     break;
                 case E_DEPLACER:
+                    goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.ELLIPSE);
                     break;
 
                 case E_SUPPRIMER_COL:
