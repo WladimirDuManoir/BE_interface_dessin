@@ -1,5 +1,8 @@
 import fr.dgac.ivy.IvyException;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Created by rooty on 22/01/2016.
  * Manages all the interactions between the different modules.
@@ -35,10 +38,15 @@ public class Controller {
     private Gestes gestes;
     private Audio audio;
     private State state;
+    private Timer timer_couleur;
+    private Timer timer_creerObjet;
+    private Timer timer_position;
+    private Timer timer_suprimer;
 
     public Controller() {
         state = State.E_INIT;
         action = Action.NOTHING;
+        SetAllTimer();
         gestes = new Gestes();
         this.stroke = new Stroke();
         stroke.init();
@@ -56,6 +64,48 @@ public class Controller {
         audio.register(this);
     }
 
+
+    public void SetAllTimer() {
+        timer_couleur = new Timer();
+        timer_couleur.schedule(new TimerTaskColor(), 1000 * 1000);
+        timer_creerObjet = new Timer();
+        timer_creerObjet.schedule(new TimerTaskObject(), 1000 * 1000);
+        timer_position = new Timer();
+        timer_position.schedule(new TimerTaskPosition(), 1000 * 1000);
+        timer_suprimer = new Timer();
+        timer_suprimer.schedule(new TimerTaskSupprimer(), 1000 * 1000);
+    }
+
+    public void StopAllTimer() {
+        timer_couleur.cancel();
+        timer_creerObjet.cancel();
+        timer_position.cancel();
+        timer_suprimer.cancel();
+    }
+
+    class TimerTaskColor extends TimerTask {
+        public void run() {
+            System.out.println("Time's up! Color");
+        }
+    }
+
+    class TimerTaskObject extends TimerTask {
+        public void run() {
+            System.out.println("Time's up! Obj");
+        }
+    }
+
+    class TimerTaskPosition extends TimerTask {
+        public void run() {
+            System.out.println("Time's up! Pos");
+        }
+    }
+
+    class TimerTaskSupprimer extends TimerTask {
+        public void run() {
+            System.out.println("Time's up! Sup");
+        }
+    }
     /**
      * For some states the Color and object attribut are not always used.
      * @param s
@@ -66,44 +116,54 @@ public class Controller {
         switch (s) {
             case E_INIT:
                 System.out.println("Go to state INIT");
+                StopAllTimer();
                 state = State.E_INIT;
                 break;
             case E_COULEUR:
                 System.out.println("Go to state COULEUR");
+                StopAllTimer();
                 state = State.E_COULEUR;
                 break;
             case E_CREER_OBJET:
                 System.out.println("Go to state CREEROBJET");
+                StopAllTimer();
                 state = State.E_CREER_OBJET;
                 break;
             case E_POSITION:
                 System.out.println("Go to state POSITION");
+                StopAllTimer();
                 state = State.E_POSITION;
                 break;
             case E_DEPLACER_OBJ:
                 System.out.println("Go to state DEPLACER_OBJ");
+                StopAllTimer();
                 state = State.E_DEPLACER_OBJ;
                 break;
             case E_DEPLACER_POS:
                 System.out.println("Go to state DEPLACER_POS");
+                StopAllTimer();
                 state = State.E_DEPLACER_POS;
                 break;
             case E_DEPLACER:
                 System.out.println("Go to state DEPLACER");
+                StopAllTimer();
                 state = State.E_DEPLACER;
                 break;
 
             case E_SUPPRIMER_COL:
                 // TODO activation du timer timer_sup.start
                 System.out.println("Go to state SUPPRIMERCOL");
+                StopAllTimer();
                 state = State.E_SUPPRIMER_COL;
                 break;
             case E_SUPPRIMER:
                 System.out.println("Go to state SUPPRIMER");
+                StopAllTimer();
                 state = State.E_SUPPRIMER;
                 break;
             default:
                 System.out.println("Not in State Ennum");
+                StopAllTimer();
                 break;
         }
     }
