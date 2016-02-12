@@ -21,7 +21,7 @@ public class Audio implements IvyMessageListener {
                 float f = Float.parseFloat(s);
                 if (f >= 0.8) {
                     try {
-                        c.move();
+                        c.position();
                     } catch (IvyException e) {
                         e.printStackTrace();
                     }

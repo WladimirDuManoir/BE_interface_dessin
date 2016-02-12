@@ -119,18 +119,22 @@ public class IvyPaletteAgent {
      * This check if the palette has a figure in a specific point.
      * @throws IvyException
      */
-    private void testPoint() throws IvyException {
+    private void ResultatPoint() throws IvyException {
         bus.bindMsg(".*Palette:ResultatTesterPoint.*nom=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
                 String obj = args[0];
-                // TODO
-                // ApplyOnShape(obj);
+                System.out.println("ghmofdiermipgjerp erùgjrpohgerpohg");
             }
         });
     }
 
-
-
+    /**
+     * This check if the palette has a figure in a specific point.
+     * @throws IvyException
+     */
+    private void testPoint() throws IvyException {
+        bus.sendMsg(".*Palette:TesterPoint x=" + c.getPosX() + " y=" + c.getPosY());
+    }
 
 
     private void testRectangle () {
