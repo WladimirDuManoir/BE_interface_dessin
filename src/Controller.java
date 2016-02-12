@@ -126,24 +126,28 @@ public class Controller {
     class TimerTaskColor extends TimerTask {
         public void run() {
             System.out.println("Time's up! Color");
+            goToState(state.E_INIT, Color.NULL, Object.NULL);
         }
     }
 
     class TimerTaskObject extends TimerTask {
         public void run() {
             System.out.println("Time's up! Obj");
+            goToState(state.E_INIT, Color.NULL, Object.NULL);
         }
     }
 
     class TimerTaskPosition extends TimerTask {
         public void run() {
             System.out.println("Time's up! Pos");
+            goToState(state.E_INIT, Color.NULL, Object.NULL);
         }
     }
 
     class TimerTaskSupprimer extends TimerTask {
         public void run() {
             System.out.println("Time's up! Sup");
+            goToState(state.E_INIT, Color.NULL, Object.NULL);
         }
     }
     /**
@@ -162,17 +166,19 @@ public class Controller {
             case E_COULEUR:
                 System.out.println("Go to state COULEUR");
                 StopAllTimer();
+                StartTimerColor();
                 state = State.E_COULEUR;
                 break;
             case E_CREER_OBJET:
                 System.out.println("Go to state CREEROBJET");
                 StopAllTimer();
-                timer_creerObjet.purge();
+                StartTimerObject();
                 state = State.E_CREER_OBJET;
                 break;
             case E_POSITION:
                 System.out.println("Go to state POSITION");
                 StopAllTimer();
+                StartTimerPosition();
                 state = State.E_POSITION;
                 break;
             case E_DEPLACER_OBJ:
@@ -192,9 +198,9 @@ public class Controller {
                 break;
 
             case E_SUPPRIMER_COL:
-                // TODO activation du timer timer_sup.start
                 System.out.println("Go to state SUPPRIMERCOL");
                 StopAllTimer();
+                StartTimerSupprimer();
                 state = State.E_SUPPRIMER_COL;
                 break;
             case E_SUPPRIMER:
