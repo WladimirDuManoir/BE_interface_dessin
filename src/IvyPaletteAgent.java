@@ -4,6 +4,7 @@ import fr.dgac.ivy.IvyException;
 import fr.dgac.ivy.IvyMessageListener;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.Point2D;
 
 /**
@@ -106,7 +107,6 @@ public class IvyPaletteAgent {
             public void receive(IvyClient client, String[] args) {
                 String x = args[0];
                 String y = args[1];
-               // System.out.println("x:"+x+",y"+y);
                 c.getStroke().addPoint(new Point2D.Double (Double.parseDouble(x),Double.parseDouble(y)));
 
             }
@@ -141,7 +141,6 @@ public class IvyPaletteAgent {
             bus.sendMsg("Palette:CreerRectangle x=200");
             bus.sendMsg("Palette:CreerRectangle x=10");
         } catch (IvyException e) {
-            System.out.println("dfgdhdfhgdxfhgdfhxdf");
             e.printStackTrace();
         }
     }
@@ -155,15 +154,62 @@ public class IvyPaletteAgent {
         bus.sendMsg("Palette:SupprimerObject nom=" + obj);
     }
 
-    public void creatRec(String obj) throws IvyException {
-        bus.sendMsg("Palette:CreerRectangle x=30 y=30 longueur=100");
+    public void creerObjet(Controller.Object obj, Controller.Color color, Point2D.Double position) throws IvyException {
+        String x = Integer.toString((int) position.getX());
+        String y = Integer.toString((int) position.getY());
+        String couleur =null;
+        switch(color){
+            case BLEU:
+                couleur="Blue";
+                break;
+            case ROUGE:
+                couleur="Red";
+                break;
+            case VERT:
+                couleur="Green";
+                break;
+            case JAUNE:
+                couleur="Yellow";
+                break;
+            case NULL:
+                break;
+            default:
+                couleur="Red";
+                break;
+        }
+        switch(obj){
+            case ELLIPSE:
+                bus.sendMsg("Palette:CreerEllipse x="+x+" y="+y+" longueur=100 couleurFond="+couleur);
+                break;
+            case RECTANGLE:
+                bus.sendMsg("Palette:CreerRectangle x="+x+" y="+y+" longueur=100 couleurFond="+couleur);
+                break;
+            case OBJECT:
+                break;
+            case NULL:
+                break;
+            default:
+                break;
+        }
     }
 
-    public void creatEllipse(String obj) throws IvyException  {
-        bus.sendMsg("Palette:CreerEllipse x=30 y=30 longueur=100");
+    public void creerObjet(Controller.Object obj) throws IvyException {
+        Point2D.Double position = new Point2D.Double(20, 20);
+        creerObjet(obj, Controller.Color.VERT, position);
     }
 
-    public void move(String obj)  throws IvyException {
+    public void creerObjet(Controller.Object obj, Controller.Color color) throws IvyException {
+        Point2D.Double position = new Point2D.Double(20, 20);
+        creerObjet(obj, color, position);
+    }
+
+    public void creerObjet(Controller.Object obj, Point2D.Double position) throws IvyException {
+        creerObjet(obj, Controller.Color.VERT, position);
+    }
+
+
+
+        public void move(String obj)  throws IvyException {
         bus.sendMsg("Palette:DeplacerObjet nom=" + obj + " x=300");
     }
 }
