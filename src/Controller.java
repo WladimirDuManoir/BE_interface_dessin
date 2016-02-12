@@ -35,6 +35,8 @@ public class Controller {
     private Gestes gestes;
     private Audio audio;
     private State state;
+    private Object objet;
+    private Color couleur;
 
     public Controller() {
         state = State.E_INIT;
@@ -116,6 +118,8 @@ public class Controller {
         this.stroke = stroke;
     }
 
+
+
     private void determinerStrokeGestes() throws IvyException {
         switch (gestes.determinerStroke(stroke)) {
             case 1 :
@@ -127,12 +131,14 @@ public class Controller {
             case 2 :
                 System.out.println("Rectangle");
                 goToState(State.E_CREER_OBJET, Color.NULL, Object.RECTANGLE);
+                objet = Object.RECTANGLE;
                 action = Action.RECTANGLE;
                 ApplyOnShape("rectangle");
                 break;
             case 3 :
                 System.out.println("Ellipse");
                 goToState(State.E_CREER_OBJET, Color.NULL, Object.ELLIPSE);
+                objet = Object.ELLIPSE;
                 action = Action.ELLIPSE;
                 ApplyOnShape("eclipse");
                 break;
@@ -209,6 +215,36 @@ public class Controller {
      */
     public void move() {
         System.out.println("Move");
+
+        switch (state) {
+            case E_INIT:
+                break;
+            case E_COULEUR:
+                goToState(state.E_INIT, couleur, objet);
+                //TODO Creer objet(objet, couleur, position)
+                break;
+            case E_CREER_OBJET:
+                goToState(state.E_POSITION, Color.NULL, objet);
+                break;
+            case E_POSITION:
+                break;
+            case E_DEPLACER_OBJ:
+                goToState(state.E_INIT, Color.NULL, objet);
+                //TODO Deplacer objet(objet, position)
+                break;
+            case E_DEPLACER_POS:
+                break;
+            case E_DEPLACER:
+                goToState(state.E_DEPLACER_POS, Color.NULL, objet);
+                break;
+            case E_SUPPRIMER_COL:
+                break;
+            case E_SUPPRIMER:
+                break;
+            default:
+                System.out.println("Not in State Ennum");
+                break;
+        }
     }
 
     /**
@@ -218,13 +254,137 @@ public class Controller {
     public Color color(String color){
         System.out.println("Color _" + color + "_");
         if (color.equals("rouge")) {
+
+            switch (state) {
+                case E_INIT:
+                    break;
+                case E_COULEUR:
+                    break;
+                case E_CREER_OBJET:
+                    goToState(state.E_COULEUR, Color.ROUGE, objet);
+                    break;
+                case E_POSITION:
+                    goToState(state.E_INIT, Color.ROUGE, objet);
+                    //TODO Creer objet(objet, couleur, position)
+                    break;
+                case E_DEPLACER_OBJ:
+                    break;
+                case E_DEPLACER_POS:
+                    break;
+                case E_DEPLACER:
+                    break;
+                case E_SUPPRIMER_COL:
+                    goToState(state.E_INIT, Color.ROUGE, objet);
+                    //TODO Supprimer objet(objet,couleur)
+                    break;
+                case E_SUPPRIMER:
+                    break;
+                default:
+                    System.out.println("Not in State Ennum");
+                    break;
+            }
             return Color.ROUGE;
+
         } else if (color.equals("jaune")) {
+
+            switch (state) {
+                case E_INIT:
+                    break;
+                case E_COULEUR:
+                    break;
+                case E_CREER_OBJET:
+                    goToState(state.E_COULEUR, Color.JAUNE, objet);
+                    break;
+                case E_POSITION:
+                    goToState(state.E_INIT, Color.JAUNE, objet);
+                    //TODO Creer objet(objet, couleur, position)
+                    break;
+                case E_DEPLACER_OBJ:
+                    break;
+                case E_DEPLACER_POS:
+                    break;
+                case E_DEPLACER:
+                    break;
+                case E_SUPPRIMER_COL:
+                    goToState(state.E_INIT, Color.JAUNE, objet);
+                    //TODO Supprimer objet(objet,couleur)
+                    break;
+                case E_SUPPRIMER:
+                    break;
+                default:
+                    System.out.println("Not in State Ennum");
+                    break;
+
+            }
             return Color.JAUNE;
+
         } else if (color.equals("vert")) {
+
+
+            switch (state) {
+                case E_INIT:
+                    break;
+                case E_COULEUR:
+                    break;
+                case E_CREER_OBJET:
+                    goToState(state.E_COULEUR, Color.VERT, objet);
+                    break;
+                case E_POSITION:
+                    goToState(state.E_INIT, Color.VERT, objet);
+                    //TODO Creer objet(objet, couleur, position)
+                    break;
+                case E_DEPLACER_OBJ:
+                    break;
+                case E_DEPLACER_POS:
+                    break;
+                case E_DEPLACER:
+                    break;
+                case E_SUPPRIMER_COL:
+                    goToState(state.E_INIT, Color.VERT, objet);
+                    //TODO Supprimer objet(objet,couleur)
+                    break;
+                case E_SUPPRIMER:
+                    break;
+                default:
+                    System.out.println("Not in State Ennum");
+                    break;
+
+
+            }
             return Color.VERT;
+
         } else if (color.equals("bleu")){
+
+            switch (state) {
+                case E_INIT:
+                    break;
+                case E_COULEUR:
+                    break;
+                case E_CREER_OBJET:
+                    goToState(state.E_COULEUR, Color.BLEU, objet);
+                    break;
+                case E_POSITION:
+                    goToState(state.E_INIT, Color.BLEU, objet);
+                    //TODO Creer objet(objet, couleur, position)
+                    break;
+                case E_DEPLACER_OBJ:
+                    break;
+                case E_DEPLACER_POS:
+                    break;
+                case E_DEPLACER:
+                    break;
+                case E_SUPPRIMER_COL:
+                    goToState(state.E_INIT, Color.BLEU, objet);
+                    //TODO Supprimer objet(objet,couleur)
+                    break;
+                case E_SUPPRIMER:
+                    break;
+                default:
+                    System.out.println("Not in State Ennum");
+                    break;
+            }
             return Color.BLEU;
+
         }
         return Color.ROUGE;
     }
