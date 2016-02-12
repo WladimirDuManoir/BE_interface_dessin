@@ -287,7 +287,8 @@ public class Controller {
                 case E_COULEUR:
                     break;
                 case E_CREER_OBJET:
-                    goToState(state.E_COULEUR, Color.ROUGE, objet);
+                    couleur = Color.ROUGE;
+                    goToState(state.E_COULEUR, couleur, objet);
                     break;
                 case E_POSITION:
                     goToState(state.E_INIT, Color.ROUGE, objet);
@@ -385,6 +386,7 @@ public class Controller {
                 case E_COULEUR:
                     break;
                 case E_CREER_OBJET:
+                    couleur = Color.BLEU;
                     goToState(state.E_COULEUR, Color.BLEU, objet);
                     break;
                 case E_POSITION:
@@ -434,6 +436,7 @@ public class Controller {
                 case E_DEPLACER_POS:
                     break;
                 case E_DEPLACER:
+                    goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.OBJECT);
                     break;
                 case E_SUPPRIMER_COL:
                     break;
@@ -461,6 +464,7 @@ public class Controller {
                 case E_DEPLACER_POS:
                     break;
                 case E_DEPLACER:
+                    goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.RECTANGLE);
                     break;
                 case E_SUPPRIMER_COL:
                     break;
@@ -485,8 +489,10 @@ public class Controller {
                 case E_DEPLACER_OBJ:
                     break;
                 case E_DEPLACER_POS:
+                    goToState(state.E_INIT, Color.NULL, Object.ELLIPSE);
                     break;
                 case E_DEPLACER:
+                    goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.ELLIPSE);
                     break;
 
                 case E_SUPPRIMER_COL:
