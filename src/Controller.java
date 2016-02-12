@@ -14,14 +14,30 @@ public class Controller {
     public enum Action {
         DELETE, RECTANGLE, ELLIPSE, MOVE, NOTHING
     }
+    public enum State {
+        E_INIT,
+
+        E_COULEUR,
+        E_CREER_OBJET,
+        E_POSITION,
+
+        E_DEPLACER_OBJ,
+        E_DEPLACER_POS,
+        E_DEPLACER,
+
+        E_SUPPRIMER_COL,
+        E_SUPPRIMER
+    }
 
     private Action action;
     private Stroke stroke;
     private IvyPaletteAgent paletteAgent;
     private Gestes gestes;
     private Audio audio;
+    private State state;
 
     public Controller() {
+        state = State.E_INIT;
         action = Action.NOTHING;
         gestes = new Gestes();
         this.stroke = new Stroke();
@@ -40,6 +56,58 @@ public class Controller {
         audio.register(this);
     }
 
+    /**
+     * For some states the Color and object attribut are not always used.
+     * @param s
+     * @param color
+     * @param objet
+     */
+    private void goToState (State s, Color color, Object objet) {
+        switch (s) {
+            case E_INIT:
+                System.out.println("Go to state INIT");
+                state = State.E_INIT;
+                break;
+            case E_COULEUR:
+                System.out.println("Go to state COULEUR");
+                state = State.E_COULEUR;
+                break;
+            case E_CREER_OBJET:
+                System.out.println("Go to state CREEROBJET");
+                state = State.E_CREER_OBJET;
+                break;
+            case E_POSITION:
+                System.out.println("Go to state POSITION");
+                state = State.E_POSITION;
+                break;
+            case E_DEPLACER_OBJ:
+                System.out.println("Go to state DEPLACER_OBJ");
+                state = State.E_DEPLACER_OBJ;
+                break;
+            case E_DEPLACER_POS:
+                System.out.println("Go to state DEPLACER_POS");
+                state = State.E_DEPLACER_POS;
+                break;
+            case E_DEPLACER:
+                System.out.println("Go to state DEPLACER");
+                state = State.E_DEPLACER;
+                break;
+
+            case E_SUPPRIMER_COL:
+                // TODO activation du timer timer_sup.start
+                System.out.println("Go to state SUPPRIMERCOL");
+                state = State.E_SUPPRIMER_COL;
+                break;
+            case E_SUPPRIMER:
+                System.out.println("Go to state SUPPRIMER");
+                state = State.E_SUPPRIMER;
+                break;
+            default:
+                System.out.println("Not in State Ennum");
+                break;
+        }
+    }
+
     public Stroke getStroke() {
         return stroke;
     }
@@ -52,20 +120,25 @@ public class Controller {
         switch (gestes.determinerStroke(stroke)) {
             case 1 :
                 System.out.println("Supprimer");
+                goToState(State.E_SUPPRIMER, Color.NULL, Object.NULL);
                 action = Action.DELETE;
+
                 break;
             case 2 :
                 System.out.println("Rectangle");
+                goToState(State.E_CREER_OBJET, Color.NULL, Object.RECTANGLE);
                 action = Action.RECTANGLE;
                 ApplyOnShape("rectangle");
                 break;
             case 3 :
                 System.out.println("Ellipse");
+                goToState(State.E_CREER_OBJET, Color.NULL, Object.ELLIPSE);
                 action = Action.ELLIPSE;
                 ApplyOnShape("eclipse");
                 break;
             case 4 :
                 System.out.println("Deplacer");
+                goToState(State.E_DEPLACER, Color.NULL, Object.NULL);
                 action = Action.MOVE;
                 break;
             default:
@@ -124,11 +197,11 @@ public class Controller {
     // Audio
 
     public enum Color {
-        ROUGE, JAUNE, VERT, BLEU
+        ROUGE, JAUNE, VERT, BLEU , NULL
     }
 
     public enum Object {
-        OBJECT, RECTANGLE, ELLIPSE
+        OBJECT, RECTANGLE, ELLIPSE, NULL
     }
 
     /**
@@ -143,7 +216,7 @@ public class Controller {
      * @param color
      */
     public Color color(String color){
-        System.out.println("Color _" + color+"_");
+        System.out.println("Color _" + color + "_");
         if (color.equals("rouge")) {
             return Color.ROUGE;
         } else if (color.equals("jaune")) {
@@ -157,18 +230,91 @@ public class Controller {
     }
 
     /**
-     *
+     * Call went recived an audio evenements.
      * @param objet
      */
-    public Object object(String objet){
-        System.out.println("Object _" + objet+"_");
-        if (objet.equals("rouge")) {
-            return Object.OBJECT;
-        } else if (objet.equals("jaune")) {
-            return Object.RECTANGLE;
-        } else if (objet.equals("vert")) {
-            return Object.ELLIPSE;
+    public void object(String objet){
+        System.out.println("Object _" + objet + "_");
+        if (objet.equals("cet objet")) {
+            switch (state) {
+                case E_INIT:
+                    break;
+                case E_COULEUR:
+                    break;
+                case E_CREER_OBJET:
+                    break;
+                case E_POSITION:
+                    break;
+
+                case E_DEPLACER_OBJ:
+                    break;
+                case E_DEPLACER_POS:
+                    break;
+                case E_DEPLACER:
+                    break;
+                case E_SUPPRIMER_COL:
+                    break;
+                case E_SUPPRIMER:
+                    goToState(state.E_SUPPRIMER_COL, Color.NULL, Object.OBJECT);
+                    break;
+                default:
+                    System.out.println("Not in State Ennum");
+                    break;
+            }
+        } else if (objet.equals("ce rectangle")) {
+            switch (state) {
+                case E_INIT:
+                    break;
+                case E_COULEUR:
+                    break;
+                case E_CREER_OBJET:
+                    break;
+                case E_POSITION:
+                    break;
+
+                case E_DEPLACER_OBJ:
+                    break;
+                case E_DEPLACER_POS:
+                    break;
+                case E_DEPLACER:
+                    break;
+
+                case E_SUPPRIMER_COL:
+                    break;
+                case E_SUPPRIMER:
+                    goToState(state.E_SUPPRIMER_COL, Color.NULL, Object.RECTANGLE);
+                    break;
+                default:
+                    System.out.println("Not in State Ennum");
+                    break;
+            }
+        } else if (objet.equals("cette ellipse")) {
+            switch (state) {
+                case E_INIT:
+                    break;
+                case E_COULEUR:
+                    break;
+                case E_CREER_OBJET:
+                    break;
+                case E_POSITION:
+                    break;
+
+                case E_DEPLACER_OBJ:
+                    break;
+                case E_DEPLACER_POS:
+                    break;
+                case E_DEPLACER:
+                    break;
+
+                case E_SUPPRIMER_COL:
+                    break;
+                case E_SUPPRIMER:
+                    goToState(state.E_SUPPRIMER_COL, Color.NULL, Object.ELLIPSE);
+                    break;
+                default:
+                    System.out.println("Not in State Ennum");
+                    break;
+            }
         }
-        return Object.OBJECT;
     }
 }
