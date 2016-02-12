@@ -50,6 +50,7 @@ public class Controller {
     private int posY;
 
 
+
     public Controller() {
         posX = 0;
         posY = 0;
@@ -96,16 +97,20 @@ public class Controller {
     }
 
     public void StartTimerColor() {
-        timer_couleur.schedule(new TimerTaskColor(), 3 * 1000);
+        timer_couleur = new Timer();
+        timer_couleur.schedule(new TimerTaskColor(), 5 * 1000);
     }
     public void StartTimerObject() {
-        timer_creerObjet.schedule(new TimerTaskObject(), 3 * 1000);
+        timer_creerObjet = new Timer();
+        timer_creerObjet.schedule(new TimerTaskObject(), 5 * 1000);
     }
     public void StartTimerPosition() {
-        timer_position.schedule(new TimerTaskPosition(), 3 * 1000);
+        timer_position = new Timer();
+        timer_position.schedule(new TimerTaskPosition(), 5 * 1000);
     }
     public void StartTimerSupprimer() {
-        timer_suprimer.schedule(new TimerTaskSupprimer(), 3 * 1000);
+        timer_suprimer = new Timer();
+        timer_suprimer.schedule(new TimerTaskSupprimer(), 5 * 1000);
     }
 
     public void SetAllTimer() {
@@ -116,16 +121,25 @@ public class Controller {
     }
 
 
-        public void StopAllTimer() {
-        timer_couleur.cancel();
-        timer_creerObjet.cancel();
-        timer_position.cancel();
-        timer_suprimer.cancel();
+    public void StopAllTimer() {
+                timer_couleur.cancel();
+                timer_couleur.purge();
+                timer_creerObjet.cancel();
+                timer_creerObjet.purge();
+                timer_position.cancel();
+                timer_position.purge();
+                timer_suprimer.cancel();
+                timer_suprimer.purge();
     }
 
     class TimerTaskColor extends TimerTask {
         public void run() {
             System.out.println("Time's up! Color");
+            try {
+                paletteAgent.creerObjet(objet, couleur);
+            } catch (IvyException e) {
+                e.printStackTrace();
+            }
             goToState(state.E_INIT, Color.NULL, Object.NULL);
         }
     }
@@ -133,13 +147,25 @@ public class Controller {
     class TimerTaskObject extends TimerTask {
         public void run() {
             System.out.println("Time's up! Obj");
+            try {
+                paletteAgent.creerObjet(objet);
+            } catch (IvyException e) {
+                e.printStackTrace();
+            }
             goToState(state.E_INIT, Color.NULL, Object.NULL);
         }
     }
 
     class TimerTaskPosition extends TimerTask {
+        Point2D.Double pt = new Point2D.Double((double) posX,(double) posY);
         public void run() {
             System.out.println("Time's up! Pos");
+            try {
+                paletteAgent.creerObjet(objet, pt);
+            } catch (IvyException e) {
+                e.printStackTrace();
+            }
+
             goToState(state.E_INIT, Color.NULL, Object.NULL);
         }
     }

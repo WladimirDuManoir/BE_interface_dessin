@@ -157,7 +157,7 @@ public class IvyPaletteAgent {
         bus.sendMsg("Palette:SupprimerObject nom=" + obj);
     }
 
-    public void creerObjet(Controller.Object obj, Controller.Color color, Point2D.Double position) throws IvyException {
+    public void creerObjet(Controller.Object obj, Controller.Color color, Point2D.Double position) {
         String x = Integer.toString((int) position.getX());
         String y = Integer.toString((int) position.getY());
         String couleur =null;
@@ -182,10 +182,18 @@ public class IvyPaletteAgent {
         }
         switch(obj){
             case ELLIPSE:
-                bus.sendMsg("Palette:CreerEllipse x="+x+" y="+y+" longueur=100 couleurFond="+couleur);
+                try {
+                    bus.sendMsg("Palette:CreerEllipse x="+x+" y="+y+" longueur=100 couleurFond="+couleur);
+                } catch (IvyException e) {
+                    e.printStackTrace();
+                }
                 break;
             case RECTANGLE:
-                bus.sendMsg("Palette:CreerRectangle x="+x+" y="+y+" longueur=100 couleurFond="+couleur);
+                try {
+                    bus.sendMsg("Palette:CreerRectangle x="+x+" y="+y+" longueur=100 couleurFond="+couleur);
+                } catch (IvyException e) {
+                    e.printStackTrace();
+                }
                 break;
             case OBJECT:
                 break;
