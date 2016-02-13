@@ -21,7 +21,7 @@ public class Audio implements IvyMessageListener {
                 float f = Float.parseFloat(s);
                 if (f >= 0.8) {
                     try {
-                        c.position();
+                        c.determinerPosition();
                     } catch (IvyException e) {
                         e.printStackTrace();
                     }
@@ -41,7 +41,7 @@ public class Audio implements IvyMessageListener {
                 float f = Float.parseFloat(confiance);
                 if (f >= 0.8) {
                     try {
-                        c.color(couleur);
+                        c.DesignationColor(couleur);
                     } catch (IvyException e) {
                         e.printStackTrace();
                     }

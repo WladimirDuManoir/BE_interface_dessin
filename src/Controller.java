@@ -46,14 +46,18 @@ public class Controller {
     private Timer timer_creerObjet;
     private Timer timer_position;
     private Timer timer_suprimer;
+    private int TIMER_TIME = 5;
     private int posX;
     private int posY;
-
+    Point2D.Double pt;
+    String nomObject;
 
 
     public Controller() {
-        posX = 0;
-        posY = 0;
+        posX = 20;
+        posY = 20;
+        nomObject = "NOT DEFINED";
+        pt = new Point2D.Double((double) posX,(double) posY);
         state = State.E_INIT;
         action = Action.NOTHING;
         SetAllTimer();
@@ -73,7 +77,7 @@ public class Controller {
         paletteAgent.register(this);
         audio.register(this);
         try {
-            paletteAgent.testPoint();
+            paletteAgent.testPoint(); // ?
         } catch (IvyException e) {
             e.printStackTrace();
         }
@@ -86,6 +90,7 @@ public class Controller {
 
     public void setPosX(int posX) {
         this.posX = posX;
+        this.pt = new Point2D.Double((double) posX,(double) posY);
     }
 
     public int getPosY() {
@@ -94,23 +99,24 @@ public class Controller {
 
     public void setPosY(int posY) {
         this.posY = posY;
+        pt = new Point2D.Double((double) posX,(double) posY);
     }
 
     public void StartTimerColor() {
         timer_couleur = new Timer();
-        timer_couleur.schedule(new TimerTaskColor(), 5 * 1000);
+        timer_couleur.schedule(new TimerTaskColor(), TIMER_TIME * 1000);
     }
     public void StartTimerObject() {
         timer_creerObjet = new Timer();
-        timer_creerObjet.schedule(new TimerTaskObject(), 5 * 1000);
+        timer_creerObjet.schedule(new TimerTaskObject(), TIMER_TIME * 1000);
     }
     public void StartTimerPosition() {
         timer_position = new Timer();
-        timer_position.schedule(new TimerTaskPosition(), 5 * 1000);
+        timer_position.schedule(new TimerTaskPosition(), TIMER_TIME * 1000);
     }
     public void StartTimerSupprimer() {
         timer_suprimer = new Timer();
-        timer_suprimer.schedule(new TimerTaskSupprimer(), 5 * 1000);
+        timer_suprimer.schedule(new TimerTaskSupprimer(), TIMER_TIME * 1000);
     }
 
     public void SetAllTimer() {
@@ -173,6 +179,12 @@ public class Controller {
     class TimerTaskSupprimer extends TimerTask {
         public void run() {
             System.out.println("Time's up! Sup");
+            try {
+                String string = paletteAgent.getSelectedObject();
+                paletteAgent.delete(paletteAgent.getSelectedObject());
+            } catch (IvyException e) {
+                e.printStackTrace();
+            }
             goToState(state.E_INIT, Color.NULL, Object.NULL);
         }
     }
@@ -250,6 +262,7 @@ public class Controller {
     }
 
     private void determinerStrokeGestes() throws IvyException {
+
         switch (gestes.determinerStroke(stroke)) {
             case DELETE:
                 System.out.println("Supprimer");
@@ -305,8 +318,8 @@ public class Controller {
     /**
      *
      */
-    public void position() throws IvyException {
-        System.out.println("position ");
+    public void determinerPosition() throws IvyException {
+        System.out.println("determinerPosition ");
         Point2D.Double pt = new Point2D.Double((double) posX,(double) posY);
         System.out.println(state);
         switch (state) {
@@ -322,8 +335,9 @@ public class Controller {
             case E_POSITION:
                 break;
             case E_DEPLACER_OBJ:
+                paletteAgent.move(nomObject);
                 goToState(state.E_INIT, Color.NULL, objet);
-                //TODO Deplacer objet(objet, position)
+                //TODO Deplacer objet(objet, determinerPosition)
                 break;
             case E_DEPLACER_POS:
                 break;
@@ -333,6 +347,7 @@ public class Controller {
             case E_SUPPRIMER_COL:
                 break;
             case E_SUPPRIMER:
+                goToState(state.E_SUPPRIMER_COL, Color.NULL, Object.NULL);
                 break;
             default:
                 System.out.println("Not in State Ennum");
@@ -344,10 +359,11 @@ public class Controller {
      *
      * @param color
      */
-    public Color color(String color) throws IvyException {
+    public Color DesignationColor(String color) throws IvyException {
         System.out.println("Color _" + color + "_");
+        System.out.println("----colorFromObj: " + paletteAgent.GetColorOnSelectedObjet());
         if (color.equals("rouge")) {
-
+            couleur = Color.ROUGE;
             switch (state) {
                 case E_INIT:
                     break;
@@ -358,7 +374,6 @@ public class Controller {
                     goToState(state.E_COULEUR, couleur, objet);
                     break;
                 case E_POSITION:
-                    Point2D.Double pt = new Point2D.Double((double) posX,(double) posY);
                     couleur = Color.ROUGE;
                     paletteAgent.creerObjet(objet, couleur, pt);
                     goToState(state.E_INIT, Color.ROUGE, objet);
@@ -371,7 +386,9 @@ public class Controller {
                     break;
                 case E_SUPPRIMER_COL:
                     goToState(state.E_INIT, Color.ROUGE, objet);
-                    //TODO Supprimer objet(objet,couleur)
+                    String string = paletteAgent.getSelectedObject();
+                    paletteAgent.delete(string);
+                    //TODO Supprimer IF !!
                     break;
                 case E_SUPPRIMER:
                     break;
@@ -382,7 +399,7 @@ public class Controller {
             return Color.ROUGE;
 
         } else if (color.equals("jaune")) {
-
+            couleur = Color.JAUNE;
             switch (state) {
                 case E_INIT:
                     break;
@@ -394,9 +411,8 @@ public class Controller {
                     break;
                 case E_POSITION:
                     couleur = Color.JAUNE;
-
+                    paletteAgent.creerObjet(objet, couleur, pt);
                     goToState(state.E_INIT, Color.JAUNE, objet);
-                    //TODO Creer objet(objet, couleur, position)
                     break;
                 case E_DEPLACER_OBJ:
                     break;
@@ -406,7 +422,9 @@ public class Controller {
                     break;
                 case E_SUPPRIMER_COL:
                     goToState(state.E_INIT, Color.JAUNE, objet);
-                    //TODO Supprimer objet(objet,couleur)
+                    String string = paletteAgent.getSelectedObject();
+                    paletteAgent.delete(paletteAgent.getSelectedObject());
+                    //TODO Supprimer IF !!
                     break;
                 case E_SUPPRIMER:
                     break;
@@ -417,7 +435,7 @@ public class Controller {
             return Color.JAUNE;
 
         } else if (color.equals("vert")) {
-
+            couleur = Color.VERT;
             switch (state) {
                 case E_INIT:
                     break;
@@ -425,14 +443,12 @@ public class Controller {
                     break;
                 case E_CREER_OBJET:
                     couleur = Color.VERT;
-
                     goToState(state.E_COULEUR, Color.VERT, objet);
                     break;
                 case E_POSITION:
                     couleur = Color.VERT;
-
+                    paletteAgent.creerObjet(objet, couleur, pt);
                     goToState(state.E_INIT, Color.VERT, objet);
-                    //TODO Creer objet(objet, couleur, position)
                     break;
                 case E_DEPLACER_OBJ:
                     break;
@@ -442,7 +458,9 @@ public class Controller {
                     break;
                 case E_SUPPRIMER_COL:
                     goToState(state.E_INIT, Color.VERT, objet);
-                    //TODO Supprimer objet(objet,couleur)
+                    String string = paletteAgent.getSelectedObject();
+                    paletteAgent.delete(paletteAgent.getSelectedObject());
+                    //TODO Supprimer IF !!
                     break;
                 case E_SUPPRIMER:
                     break;
@@ -453,7 +471,7 @@ public class Controller {
             return Color.VERT;
 
         } else if (color.equals("bleu")){
-
+            couleur = Color.BLEU;
             switch (state) {
                 case E_INIT:
                     break;
@@ -465,8 +483,8 @@ public class Controller {
                     break;
                 case E_POSITION:
                     couleur = Color.BLEU;
+                    paletteAgent.creerObjet(objet, couleur, pt);
                     goToState(state.E_INIT, Color.BLEU, objet);
-                    //TODO Creer objet(objet, couleur, position)
                     break;
                 case E_DEPLACER_OBJ:
                     break;
@@ -476,7 +494,9 @@ public class Controller {
                     break;
                 case E_SUPPRIMER_COL:
                     goToState(state.E_INIT, Color.BLEU, objet);
-                    //TODO Supprimer objet(objet,couleur)
+                    String string = paletteAgent.getSelectedObject();
+                    paletteAgent.delete(paletteAgent.getSelectedObject());
+                    //TODO Supprimer IF !!
                     break;
                 case E_SUPPRIMER:
                     break;
@@ -512,6 +532,7 @@ public class Controller {
                     goToState(state.E_INIT, Color.NULL, Object.OBJECT);
                     break;
                 case E_DEPLACER:
+                    nomObject = paletteAgent.getSelectedObject();
                     goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.OBJECT);
                     break;
                 case E_SUPPRIMER_COL:
@@ -541,6 +562,7 @@ public class Controller {
                     goToState(state.E_INIT, Color.NULL, Object.RECTANGLE);
                     break;
                 case E_DEPLACER:
+                    nomObject = paletteAgent.getSelectedObject();
                     goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.RECTANGLE);
                     break;
                 case E_SUPPRIMER_COL:
@@ -569,6 +591,7 @@ public class Controller {
                     goToState(state.E_INIT, Color.NULL, Object.ELLIPSE);
                     break;
                 case E_DEPLACER:
+                    nomObject = paletteAgent.getSelectedObject();
                     goToState(state.E_DEPLACER_OBJ, Color.NULL, Object.ELLIPSE);
                     break;
 

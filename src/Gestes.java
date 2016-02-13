@@ -101,7 +101,7 @@ public class Gestes {
     /**
      * Determine what gesture has been made.
      * @param s
-     * @return the chosen action. (!) default position
+     * @return the chosen action. (!) default determinerPosition
      * @throws IvyException
      */
     public Controller.Action determinerStroke(Stroke s) throws IvyException {

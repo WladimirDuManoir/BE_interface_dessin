@@ -3,8 +3,6 @@ import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyException;
 import fr.dgac.ivy.IvyMessageListener;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.geom.Point2D;
 
 /**
@@ -20,14 +18,34 @@ public class IvyPaletteAgent {
     private String lastReleaseY;
    // private Gestes gestes; // TODO delete
     private Controller c;
+    private String obj;
 
+    public String getObjColor() {
+        return objColor;
+    }
 
+    public void setObjColor(String objColor) {
+        this.objColor = objColor;
+    }
+
+    private String objColor;
+
+    public String getObj() {
+        return obj;
+    }
+
+    public void setObj(String obj) {
+        System.out.println("Obj set :: " + obj);
+        this.obj = obj;
+    }
 
     public IvyPaletteAgent() throws IvyException { // TODO Put stroke in para
         // stroke = new Stroke();
         // stroke.init();
         bus = new Ivy("IvyPaletteAgent", "IvyPaletteAgent Ready", null);
         prete();
+        obj = "Not-defined";
+        setObjColor("Not-defined");
         // gestes = new Gestes(); // TODO in controller
         mousePressed();
         mouseReleased();
@@ -35,7 +53,8 @@ public class IvyPaletteAgent {
         bus.start(null);
         lastReleaseX = "0";
         lastReleaseY = "0";
-        testRectangle();
+        ResultatPoint();
+        SetObjectInfo();
     }
 
     /**
@@ -118,20 +137,44 @@ public class IvyPaletteAgent {
      * @throws IvyException
      */
     private void ResultatPoint() throws IvyException {
-        bus.bindMsg(".*Palette:ResultatTesterPoint.*nom=(.*)", new IvyMessageListener() {
+        bus.bindMsg(".*Palette:ResultatTesterPoint x=(.*) y=(.*) nom=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
-                String obj = args[0];
-                System.out.println("ghmofdiermipgjerp erùgjrpohgerpohg");
+                setObj(args[2]);
             }
         });
+    }
+
+    public void SetObjectInfo() throws IvyException {
+        bus.bindMsg(".*Palette:Info nom=.* x=(.*) y=(.*) longueur=(.*) hauteur=(.*) couleurFond=(.*) couleurContour=(.*)", new IvyMessageListener() {
+            public void receive(IvyClient client, String[] args) {
+                System.out.println("x=" + args[0] + " y=" + args[0] + " longueur=" + args[0] + " hauteur=" + args[0] + " couleurFond=" + args[0] + " couleurContour=" + args[0] );
+                setObjColor(args[5]);
+            }
+        });
+    }
+
+    public String GetColorOnSelectedObjet() throws IvyException {
+        getSelectedObject();
+        System.out.println("-----------------Demande info pour l'object " + getObj() );
+        bus.sendMsg("Palette:DemanderInfo nom=" + getObj());
+        return getObjColor();
     }
 
     /**
      * This check if the palette has a figure in a specific point.
      * @throws IvyException
      */
-    public void testPoint() throws IvyException{
-        bus.sendMsg(".*Palette:TesterPoint x=" + c.getPosX() + " y=" + c.getPosY());
+    public void testPoint() throws IvyException {
+        bus.sendMsg("Palette:TesterPoint x=" + c.getPosX() + " y=" + c.getPosY());
+    }
+
+    public String getSelectedObject() {
+        try {
+            testPoint();
+        } catch (IvyException e) {
+            e.printStackTrace();
+        }
+        return getObj();
     }
 
     private void testRectangle () {
@@ -154,7 +197,9 @@ public class IvyPaletteAgent {
 
     // create shapes
     public void delete(String obj) throws IvyException {
-        bus.sendMsg("Palette:SupprimerObject nom=" + obj);
+        getSelectedObject();
+        System.out.println("Palette:SupprimerObjet nom=" + obj);
+        bus.sendMsg("Palette:SupprimerObjet nom=" + obj);
     }
 
     public void creerObjet(Controller.Object obj, Controller.Color color, Point2D.Double position) {
@@ -223,6 +268,7 @@ public class IvyPaletteAgent {
 
 
         public void move(String obj)  throws IvyException {
-        bus.sendMsg("Palette:DeplacerObjet nom=" + obj + " x=300");
+            System.out.println("Moved " + obj);
+        bus.sendMsg("Palette:DeplacerObjet nom=" + obj + " x=" + c.getPosX() + " y=" + c.getPosY());
     }
 }
