@@ -11,7 +11,7 @@ public class Audio implements IvyMessageListener {
 
 
     public Audio() throws IvyException {
-        System.out.println("Audio Sarted");
+        System.out.println("Audio reconition Sarted");
         bus = new Ivy("IvyTranslater","IvyTranslater Ready",null);
         bus.bindMsg(".*Position.*Confidence=([0-9],[0-9]*).*", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
@@ -40,7 +40,11 @@ public class Audio implements IvyMessageListener {
                 confiance = confiance.replace(',', '.');
                 float f = Float.parseFloat(confiance);
                 if (f >= 0.8) {
-                    c.color(couleur);
+                    try {
+                        c.color(couleur);
+                    } catch (IvyException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     rienCompris(bus);

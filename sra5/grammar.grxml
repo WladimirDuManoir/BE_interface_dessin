@@ -33,7 +33,7 @@
   </rule>
 
    <rule id="ici">
-      <item>ici</item>
+      <item>la</item>
       <tag>out.text  = "Position : ici ";</tag>
   </rule>
   

@@ -202,7 +202,7 @@ public class Controller {
                 state = State.E_CREER_OBJET;
                 break;
             case E_POSITION:
-                System.out.println("Go to state POSITION");
+                System.out.println("Go to state E_POSITION");
                 StopAllTimer();
                 StartTimerPosition();
                 state = State.E_POSITION;
@@ -306,7 +306,7 @@ public class Controller {
      *
      */
     public void position() throws IvyException {
-        System.out.println("Move");
+        System.out.println("position ");
         Point2D.Double pt = new Point2D.Double((double) posX,(double) posY);
         System.out.println(state);
         switch (state) {
@@ -344,7 +344,7 @@ public class Controller {
      *
      * @param color
      */
-    public Color color(String color){
+    public Color color(String color) throws IvyException {
         System.out.println("Color _" + color + "_");
         if (color.equals("rouge")) {
 
@@ -358,7 +358,9 @@ public class Controller {
                     goToState(state.E_COULEUR, couleur, objet);
                     break;
                 case E_POSITION:
+                    Point2D.Double pt = new Point2D.Double((double) posX,(double) posY);
                     couleur = Color.ROUGE;
+                    paletteAgent.creerObjet(objet, couleur, pt);
                     goToState(state.E_INIT, Color.ROUGE, objet);
                     break;
                 case E_DEPLACER_OBJ:

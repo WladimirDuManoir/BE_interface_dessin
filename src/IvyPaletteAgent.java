@@ -160,7 +160,7 @@ public class IvyPaletteAgent {
     public void creerObjet(Controller.Object obj, Controller.Color color, Point2D.Double position) {
         String x = Integer.toString((int) position.getX());
         String y = Integer.toString((int) position.getY());
-        String couleur =null;
+        String couleur = null;
         switch(color){
             case BLEU:
                 couleur="Blue";
@@ -175,9 +175,10 @@ public class IvyPaletteAgent {
                 couleur="Yellow";
                 break;
             case NULL:
+                couleur="Orange";
                 break;
             default:
-                couleur="Red";
+                couleur="Pink";
                 break;
         }
         switch(obj){
@@ -202,6 +203,7 @@ public class IvyPaletteAgent {
             default:
                 break;
         }
+        System.out.println("Creation - obj : " + obj + " " + couleur + " "+ x + " "+ y);
     }
 
     public void creerObjet(Controller.Object obj) throws IvyException {
